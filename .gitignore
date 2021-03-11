@@ -3,3 +3,4 @@ style-guide.md
 node_modules
 dist
 instructions.md
+.DS_Store
