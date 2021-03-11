@@ -8,7 +8,7 @@ const StyledHeader = styled.header`
   border: 3px solid var(--header-outline);
   border-radius: var(--border-radius);
   margin-top: 1.9rem;
-  margin-bottom: 5rem;
+  margin-bottom: 6.5rem;
   padding: 10px 10px 10px 20px;
   width: 100%;
 

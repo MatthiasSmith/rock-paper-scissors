@@ -16,6 +16,7 @@ const StyledChoiceChip = styled.div`
       : 'default'};
   height: 130px;
   width: 130px;
+  min-height: 130px;
   overflow: hidden;
 
   .choice-chip__inner {

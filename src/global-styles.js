@@ -30,6 +30,7 @@ const GlobalStyles = createGlobalStyle`
     color: white;
     font-family: var(--font-family);
     font-size: 16px;
+    height: -webkit-fill-available;
   }
 
   * {
@@ -39,17 +40,20 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    background: var(--bg-radial-gradient);
+    display: flex;
+    flex-flow: column;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
   main {
+    background: var(--bg-radial-gradient);
     display: flex;
+    flex: 1;
     flex-flow: column;
     align-items: center;
-    min-height: 100vh;
     padding: 0 1.75rem;
     text-transform: uppercase;
   }

@@ -11,8 +11,9 @@ const StyledDialogBackdrop = styled.div`
   height: 100%;
   width: 100%;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 9;
 `;
 
@@ -22,9 +23,10 @@ const StyledDialog = styled.div`
   background: white;
   flex-flow: column;
   height: 100%;
+  height: -webkit-fill-available;
   width: 100%;
-  max-height: 812px;
-  max-width: 375px;
+  max-height: 749px;
+  max-width: 400px;
   position: absolute;
   top: 50%;
   left: 50%;

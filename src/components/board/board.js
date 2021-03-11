@@ -21,12 +21,16 @@ const StyledBoard = styled.div`
     background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
     height: 330px;
     width: 319px;
 
     .mb-1 {
       margin-bottom: 1rem;
+    }
+
+    button {
+      margin: 0 auto;
     }
   }
 `;
@@ -98,7 +102,7 @@ const Board = ({ onResultsGiven }) => {
   };
 
   return (
-    <StyledBoard className='board flex-1' step={step}>
+    <StyledBoard className='board' step={step}>
       <div className='play-area flex-column'>
         {step === 1 ? (
           <MakeYourChoice onSelect={handleSelection} />
