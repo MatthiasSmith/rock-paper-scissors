@@ -19,7 +19,9 @@ const Attribution = () => {
         Frontend Mentor
       </a>
       <span>. Coded by</span>{' '}
-      <a href='https://github.com/MatthiasSmith/ip-address-tracker'>Matthias</a>
+      <a href='https://github.com/MatthiasSmith/rock-paper-scissors'>
+        Matthias
+      </a>
       .
     </StyledAttribution>
   );
