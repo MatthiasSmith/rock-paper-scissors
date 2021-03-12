@@ -37,15 +37,14 @@ const App = () => {
       <GlobalStyles />
       <Header score={score} />
       <Board onResultsGiven={handleResultsGiven} />
-      <div className='flex-1'>
-        <Button
-          onClick={openDialog}
-          css={`
-            margin-bottom: 2.5rem;
-          `}
-        >
-          Rules
-        </Button>
+      <div
+        className='flex-1 flex-column'
+        css={`
+          margin-bottom: 2.5rem;
+          justify-content: flex-end;
+        `}
+      >
+        <Button onClick={openDialog}>Rules</Button>
       </div>
       <Attribution />
       <RulesDialog isOpen={isDialogOpen} onClose={closeDialog} />

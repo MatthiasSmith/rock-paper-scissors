@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { gsap } from 'gsap';
 
 import ChoiceChip from '../choice-chip';
+import { gameResults } from '../../data/data';
 
 const StyledSelectedChoices = styled.div`
   margin-bottom: 4rem;
@@ -35,24 +37,63 @@ const StyledSelectedChoices = styled.div`
   }
 `;
 
-const SelectedChoices = ({ playerChoice, houseChoice }) => {
-  return (
-    <StyledSelectedChoices className='flex-row space-between'>
-      <div className='flex-column align-center'>
-        <ChoiceChip choice={playerChoice} />
-        <h3>You picked</h3>
-      </div>
-      <div className='flex-column align-center'>
-        {houseChoice ? (
-          <ChoiceChip choice={houseChoice} />
-        ) : (
-          <div className='blank-choice'></div>
-        )}
+const SelectedChoices = React.forwardRef(
+  (
+    { playerChoice, houseChoice, startingCoords, onAnimateComplete, results },
+    ref
+  ) => {
+    const houseChoiceRef = useRef(null);
 
-        <h3>The house picked</h3>
-      </div>
-    </StyledSelectedChoices>
-  );
-};
+    useEffect(() => {
+      if (!houseChoice) {
+        gsap.to(ref.current.querySelectorAll('.fade-in'), {
+          opacity: 1,
+          delay: 0.75,
+          duration: 0.5,
+        });
+
+        gsap.to(ref.current.querySelector(`[title=${playerChoice.title}]`), {
+          x: 0,
+          y: 0,
+          ease: 'power1.in',
+          duration: 0.4,
+          onComplete: () => onAnimateComplete(),
+        });
+      } else {
+        gsap.to(houseChoiceRef.current, {
+          scale: 1,
+          duration: 0.5,
+          ease: 'back.out',
+        });
+      }
+    }, [houseChoice]);
+
+    return (
+      <StyledSelectedChoices ref={ref} className='flex-row space-between'>
+        <div className='flex-column align-center'>
+          <ChoiceChip
+            choice={playerChoice}
+            coords={startingCoords}
+            showCircles={results === gameResults.WIN}
+          />
+          <h3 className='fade-in'>You picked</h3>
+        </div>
+        <div className='flex-column align-center fade-in'>
+          {houseChoice ? (
+            <ChoiceChip
+              ref={houseChoiceRef}
+              choice={houseChoice}
+              scaleUp={true}
+              showCircles={results === gameResults.LOSE}
+            />
+          ) : (
+            <div className='blank-choice'></div>
+          )}
+          <h3>The house picked</h3>
+        </div>
+      </StyledSelectedChoices>
+    );
+  }
+);
 
 export default SelectedChoices;

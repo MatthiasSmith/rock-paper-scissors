@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import styled from 'styled-components';
 
 import IconClose from '../../public/images/icon-close.svg';
@@ -6,31 +7,29 @@ import RulesImage from '../../public/images/image-rules.svg';
 import Button from './button';
 
 const StyledDialogBackdrop = styled.div`
-  display: ${(props) => (props.open ? 'block' : 'none')};
   background: rgba(0, 0, 0, 0.45);
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
+  opacity: 0;
   transform: translate(-50%, -50%);
   z-index: 9;
 `;
 
 const StyledDialog = styled.div`
-  display: ${(props) => (props.open ? 'flex' : 'none')};
   align-items: center;
   background: white;
   flex-flow: column;
   height: 100%;
-  height: -webkit-fill-available;
   width: 100%;
   max-height: 749px;
   max-width: 400px;
-  position: absolute;
+  overflow-y: auto;
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 10;
 
   h2 {
@@ -70,12 +69,39 @@ const StyledDialog = styled.div`
 `;
 
 const RulesDialog = ({ isOpen, onClose }) => {
+  const [gsapTL, setGsapTL] = useState(null);
+  const backdropRef = useRef(null);
   const dialogRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen) {
-      dialogRef.current.focus();
-    }
+    const duration = 0.4;
+    const tl = gsap.timeline({
+      paused: true,
+      defaults: { duration: duration },
+    });
+    tl.fromTo(
+      dialogRef.current,
+      { display: 'none', xPercent: -50, yPercent: 100 },
+      {
+        yPercent: -50,
+        display: 'flex',
+        ease: 'power2.out',
+        onComplete: () => (isOpen ? dialogRef.current.focus() : () => {}),
+      }
+    );
+    tl.fromTo(
+      backdropRef.current,
+      { display: 'none' },
+      { opacity: 1, display: 'block' },
+      `-=${duration}`
+    );
+
+    setGsapTL(tl);
+  }, []);
+
+  useEffect(() => {
+    if (!gsapTL) return;
+    isOpen ? gsapTL.play() : gsapTL.reverse();
   }, [isOpen]);
 
   const handleKeyUp = (event) => {
@@ -87,21 +113,21 @@ const RulesDialog = ({ isOpen, onClose }) => {
   };
 
   return (
-    <StyledDialogBackdrop open={isOpen}>
+    <Fragment>
+      <StyledDialogBackdrop ref={backdropRef} open={isOpen} />
       <StyledDialog
         ref={dialogRef}
         tabIndex='-1'
         open={isOpen}
-        aria-label='Rules dialog.'
         role='dialog'
         onKeyUp={handleKeyUp}
       >
         <div className='flex-row space-between align-center'>
-          <h2>Rules</h2>
+          <h2 id='rules-header'>Rules</h2>
           <Button
             className='close-button hidden-sm'
             onClick={onClose}
-            aria-label='Close modal button.'
+            aria-label='Close this dialog.'
           >
             <img src={IconClose} alt='Close icon.' />
           </Button>
@@ -110,18 +136,23 @@ const RulesDialog = ({ isOpen, onClose }) => {
           <img
             className='rules-img'
             src={RulesImage}
-            alt='Rock, Paper, Scissors rules.'
+            alt='The "Rock, Paper, Scissors" rules diagram.'
           />
+          <p id='rules-text' className='sr-only'>
+            The rules of "Rock, Paper, Scissors" are as follows: Rock beats
+            scissors. Scissors beats paper. And paper beats rock. If player's
+            choices are the same, it's a draw.
+          </p>
         </div>
         <Button
           className='close-button hidden-gt-sm'
           onClick={onClose}
-          aria-label='Close modal button.'
+          aria-label='Close this dialog.'
         >
           <img src={IconClose} alt='Close icon.' />
         </Button>
       </StyledDialog>
-    </StyledDialogBackdrop>
+    </Fragment>
   );
 };
 

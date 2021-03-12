@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { gsap } from 'gsap';
 
-import Triangle from '../../../public/images/bg-triangle.svg';
 import Button from '../button';
 import MakeYourChoice from './make-your-choice';
 import SelectedChoices from './selected-choices';
@@ -13,15 +13,10 @@ const StyledBoard = styled.div`
   flex-flow: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 3rem;
   width: 100%;
 
   .play-area {
-    background-image: ${(props) =>
-      props.step === 1 ? `url(${Triangle})` : 'none'};
-    background-size: 80%;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-bottom: 3rem;
     height: 330px;
     width: 319px;
 
@@ -40,22 +35,57 @@ const Board = ({ onResultsGiven }) => {
   const [playerChoice, setPlayerChoice] = useState(null);
   const [houseChoice, setHouseChoice] = useState(null);
   const [results, setResults] = useState('');
+  const [choiceCoords, setChoiceCoords] = useState({ x: 0, y: 0 });
+  const playAreaRef = useRef(null);
+  const makeYourChoiceRef = useRef(null);
+  const playerChoiceRef = useRef(null);
 
   const resetGame = () => {
     setStep(1);
+    setChoiceCoords({ x: 0, y: 0 });
   };
 
-  const handleSelection = (choice) => {
-    setStep(step + 1);
+  const handleSelect = (choice) => {
+    if (choice.id !== gameChoiceData.PAPER.id) {
+      const choiceChipEl = makeYourChoiceRef.current.querySelector(
+        `[title="${choice.title}"]`
+      );
+      if (choiceChipEl) {
+        const paperChoiceEl = makeYourChoiceRef.current.querySelector(
+          `[title="paper"]`
+        );
+        const choicePos = choiceChipEl.getBoundingClientRect();
+        const paperPos = paperChoiceEl.getBoundingClientRect();
+        setChoiceCoords({
+          x: choicePos.x - paperPos.x,
+          y: choicePos.y - paperPos.y,
+        });
+      }
+    }
+
+    gsap.to(makeYourChoiceRef.current.querySelectorAll('.fade-out'), {
+      opacity: 0,
+      onComplete: () => setStep(step + 1),
+    });
     setPlayerChoice(choice);
   };
 
+  const doStep2 = () => {
+    setTimeout(() => {
+      makeHouseChoice();
+      setStep(step + 1);
+    }, 1250);
+  };
+
   useEffect(() => {
-    if (step === 2) {
-      setTimeout(() => {
-        makeHouseChoice();
-        setStep(step + 1);
-      }, 1500);
+    const duration = 0.4;
+
+    if (step === 1) {
+      gsap.fromTo(
+        playAreaRef.current,
+        { scale: 0 },
+        { scale: 1, duration: duration, ease: 'back.out' }
+      );
     }
 
     if (step === 3) {
@@ -103,13 +133,19 @@ const Board = ({ onResultsGiven }) => {
 
   return (
     <StyledBoard className='board' step={step}>
-      <div className='play-area flex-column'>
+      <div ref={playAreaRef} className='play-area flex-column'>
         {step === 1 ? (
-          <MakeYourChoice onSelect={handleSelection} />
+          <MakeYourChoice ref={makeYourChoiceRef} onSelect={handleSelect} />
         ) : step === 2 ? (
-          <SelectedChoices playerChoice={playerChoice} />
+          <SelectedChoices
+            ref={playerChoiceRef}
+            playerChoice={playerChoice}
+            startingCoords={choiceCoords}
+            onAnimateComplete={doStep2}
+          />
         ) : step === 3 ? (
           <SelectedChoices
+            ref={playerChoiceRef}
             playerChoice={playerChoice}
             houseChoice={houseChoice}
           />
@@ -118,6 +154,7 @@ const Board = ({ onResultsGiven }) => {
             <SelectedChoices
               playerChoice={playerChoice}
               houseChoice={houseChoice}
+              results={results}
             />
             <GameResultsText results={results} />
             <Button onClick={resetGame} primary>
