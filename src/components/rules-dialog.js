@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import styled from 'styled-components';
 
@@ -13,7 +13,6 @@ const StyledDialogBackdrop = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  opacity: 0;
   transform: translate(-50%, -50%);
   z-index: 9;
 `;
@@ -46,7 +45,13 @@ const StyledDialog = styled.div`
     margin-bottom: 3rem;
   }
 
-  @media screen and (min-width: 768px) {
+  @media screen and (max-width: 425px) {
+    .hidden-xs {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 426px) {
     align-items: unset;
     border-radius: var(--desktop-border-radius);
     max-width: 400px;
@@ -65,6 +70,11 @@ const StyledDialog = styled.div`
     .image-container {
       margin: 2.5rem auto 0;
     }
+
+    // override global style
+    .hidden-gt-sm {
+      display: none;
+    }
   }
 `;
 
@@ -73,11 +83,12 @@ const RulesDialog = ({ isOpen, onClose }) => {
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const duration = 0.4;
     const tl = gsap.timeline({
       paused: true,
       defaults: { duration: duration },
+      onComplete: () => dialogRef.current.focus(),
     });
     tl.fromTo(
       dialogRef.current,
@@ -86,21 +97,21 @@ const RulesDialog = ({ isOpen, onClose }) => {
         yPercent: -50,
         display: 'flex',
         ease: 'power2.out',
-        onComplete: () => (isOpen ? dialogRef.current.focus() : () => {}),
       }
     );
     tl.fromTo(
       backdropRef.current,
-      { display: 'none' },
-      { opacity: 1, display: 'block' },
+      { display: 'none', opacity: 0 },
+      { display: 'block', opacity: 1 },
       `-=${duration}`
     );
 
     setGsapTL(tl);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!gsapTL) return;
+
     isOpen ? gsapTL.play() : gsapTL.reverse();
   }, [isOpen]);
 
@@ -119,13 +130,15 @@ const RulesDialog = ({ isOpen, onClose }) => {
         ref={dialogRef}
         tabIndex='-1'
         open={isOpen}
-        role='dialog'
         onKeyUp={handleKeyUp}
+        role='dialog'
+        aria-labelledby='rules-header'
+        aria-describedby='rules-text'
       >
         <div className='flex-row space-between align-center'>
           <h2 id='rules-header'>Rules</h2>
           <Button
-            className='close-button hidden-sm'
+            className='close-button hidden-xs'
             onClick={onClose}
             aria-label='Close this dialog.'
           >

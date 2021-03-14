@@ -64,6 +64,10 @@ const GlobalStyles = createGlobalStyle`
     text-transform: uppercase;
   }
 
+  .container {
+    width: 100%;
+  }
+
   // layout
   .flex-row {
     display: flex;

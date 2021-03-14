@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useRef } from 'react';
 
 import GlobalStyles from './global-styles';
 import Header from './components/header/header';
@@ -12,6 +12,7 @@ import BottomButtonRow from './components/bottom-button-row';
 const App = () => {
   const [score, setScore] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const rulesButtonRef = useRef(null);
 
   const openDialog = () => {
     setIsDialogOpen(true);
@@ -19,6 +20,7 @@ const App = () => {
 
   const closeDialog = () => {
     setIsDialogOpen(false);
+    rulesButtonRef.current.focus();
   };
 
   const handleResultsGiven = (result) => {
@@ -36,12 +38,19 @@ const App = () => {
   return (
     <Fragment>
       <GlobalStyles />
-      <Header score={score} />
-      <Board onResultsGiven={handleResultsGiven} />
-      <BottomButtonRow>
-        <Button onClick={openDialog}>Rules</Button>
-      </BottomButtonRow>
-      <Attribution />
+      <div
+        tabIndex={isDialogOpen ? '-1' : undefined}
+        className='container flex-column align-center flex-1'
+      >
+        <Header score={score} />
+        <Board onResultsGiven={handleResultsGiven} />
+        <BottomButtonRow>
+          <Button ref={rulesButtonRef} onClick={openDialog}>
+            Rules
+          </Button>
+        </BottomButtonRow>
+        <Attribution />
+      </div>
       <RulesDialog isOpen={isDialogOpen} onClose={closeDialog} />
     </Fragment>
   );
