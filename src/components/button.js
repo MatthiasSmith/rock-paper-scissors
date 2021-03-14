@@ -22,6 +22,11 @@ const StyledButton = styled.button`
       border: none;
       color: var(--dark-text);
       padding: 0.9rem 3.6rem;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: hsl(349, 53%, 51%);
+      }
     `}
 `;
 

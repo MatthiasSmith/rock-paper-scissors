@@ -7,6 +7,7 @@ import Board from './components/board/board';
 import Attribution from './components/attribution';
 import RulesDialog from './components/rules-dialog';
 import { gameResults } from './data/data';
+import BottomButtonRow from './components/bottom-button-row';
 
 const App = () => {
   const [score, setScore] = useState(0);
@@ -37,15 +38,9 @@ const App = () => {
       <GlobalStyles />
       <Header score={score} />
       <Board onResultsGiven={handleResultsGiven} />
-      <div
-        className='flex-1 flex-column'
-        css={`
-          margin-bottom: 2.5rem;
-          justify-content: flex-end;
-        `}
-      >
+      <BottomButtonRow>
         <Button onClick={openDialog}>Rules</Button>
-      </div>
+      </BottomButtonRow>
       <Attribution />
       <RulesDialog isOpen={isDialogOpen} onClose={closeDialog} />
     </Fragment>

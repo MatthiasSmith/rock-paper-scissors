@@ -15,6 +15,18 @@ const StyledHeader = styled.header`
   > img {
     height: 3.1rem;
   }
+
+  @media screen and (min-width: 1024px) {
+    border-radius: 14px;
+    width: 705px;
+    margin-top: 2.9rem;
+    margin-bottom: 3.75rem;
+    padding: 15px 20px 15px 30px;
+
+    > img {
+      height: 100%;
+    }
+  }
 `;
 
 const Header = ({ score }) => {

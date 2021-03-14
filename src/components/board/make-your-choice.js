@@ -21,6 +21,34 @@ const StyledMakeYourChoice = styled.div`
     top: 0;
     z-index: -1;
   }
+
+  .top-row {
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (min-width: 1024px) {
+    .bg-triangle {
+      background-position: center bottom;
+      width: 480px;
+      height: 430px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .top-row {
+      margin-bottom: 2rem;
+    }
+  }
+`;
+
+const StyledChoiceChip = styled(ChoiceChip)`
+  @media screen and (min-width: 1024px) {
+    transform: scale(0.669) translateY(-25%);
+
+    &:only-of-type {
+      transform: scale(0.669) translateY(-75%);
+    }
+  }
 `;
 
 const MakeYourChoice = React.forwardRef(({ onSelect }, ref) => {
@@ -39,12 +67,24 @@ const MakeYourChoice = React.forwardRef(({ onSelect }, ref) => {
   return (
     <StyledMakeYourChoice ref={ref}>
       <div className='bg-triangle fade-out'></div>
-      <div className='flex-row space-between mb-1'>
-        <ChoiceChip choice={gameChoiceData.PAPER} onSelect={handleSelect} />
-        <ChoiceChip choice={gameChoiceData.SCISSORS} onSelect={handleSelect} />
+      <div className='flex-row space-between top-row'>
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={gameChoiceData.PAPER}
+          onSelect={handleSelect}
+        />
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={gameChoiceData.SCISSORS}
+          onSelect={handleSelect}
+        />
       </div>
       <div className='flex-row justify-center'>
-        <ChoiceChip choice={gameChoiceData.ROCK} onSelect={handleSelect} />
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={gameChoiceData.ROCK}
+          onSelect={handleSelect}
+        />
       </div>
     </StyledMakeYourChoice>
   );

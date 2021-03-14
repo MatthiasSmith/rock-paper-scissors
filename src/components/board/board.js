@@ -28,6 +28,16 @@ const StyledBoard = styled.div`
       margin: 0 auto;
     }
   }
+
+  @media screen and (min-width: 1024px) {
+    margin-bottom: 0;
+
+    .play-area {
+      height: 430px;
+      min-width: 480px;
+      width: unset;
+    }
+  }
 `;
 
 const Board = ({ onResultsGiven }) => {
@@ -39,12 +49,14 @@ const Board = ({ onResultsGiven }) => {
   const playAreaRef = useRef(null);
   const makeYourChoiceRef = useRef(null);
   const playerChoiceRef = useRef(null);
+  const resultsRef = useRef(null);
 
   const resetGame = () => {
     setStep(1);
     setChoiceCoords({ x: 0, y: 0 });
   };
 
+  // TODO: move this into the MakeYourChoice component
   const handleSelect = (choice) => {
     if (choice.id !== gameChoiceData.PAPER.id) {
       const choiceChipEl = makeYourChoiceRef.current.querySelector(
@@ -95,6 +107,10 @@ const Board = ({ onResultsGiven }) => {
         onResultsGiven(result);
         setStep(step + 1);
       }, 1500);
+    }
+
+    if (step === 4) {
+      gsap.to(resultsRef.current, { opacity: 1, duration: 0.5 });
     }
   }, [step]);
 
@@ -155,11 +171,17 @@ const Board = ({ onResultsGiven }) => {
               playerChoice={playerChoice}
               houseChoice={houseChoice}
               results={results}
+              onPlayAgain={resetGame}
             />
-            <GameResultsText results={results} />
-            <Button onClick={resetGame} primary>
-              Play Again
-            </Button>
+            <div
+              ref={resultsRef}
+              className='hidden-gt-sm flex-column align-center fade-in'
+            >
+              <GameResultsText results={results} />
+              <Button onClick={resetGame} primary>
+                Play Again
+              </Button>
+            </div>
           </Fragment>
         )}
       </div>

@@ -20,8 +20,18 @@ const StyledScoreCard = styled.div`
     line-height: 1em;
   }
 
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 1024px) {
     border-radius: var(--desktop-border-radius);
+    padding: 1.1rem;
+    width: 150px;
+
+    .score-text {
+      font-size: 1rem;
+    }
+
+    .score-value {
+      font-size: 4rem;
+    }
   }
 `;
 

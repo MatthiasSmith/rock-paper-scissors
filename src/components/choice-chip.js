@@ -15,9 +15,9 @@ const StyledChoiceChip = styled.div`
     props.onClick && typeof props.onClick === 'function'
       ? 'pointer'
       : 'default'};
-  height: 130px;
-  width: 130px;
-  min-height: 130px;
+  height: var(--sm-chip-size);
+  min-height: var(--sm-chip-size);
+  width: var(--sm-chip-size);
   overflow: hidden;
   transform: ${(props) =>
     props.coords
@@ -30,8 +30,8 @@ const StyledChoiceChip = styled.div`
     background-color: hsl(0, 0%, 87%);
     border-radius: 50%;
     box-shadow: inset 0px 10px 1px -5px rgba(0, 0, 0, 0.12);
-    height: 100px;
-    width: 100px;
+    height: var(--sm-chip-inner-size);
+    width: var(--sm-chip-inner-size);
     margin: 0 auto;
     position: relative;
     z-index: 1;
@@ -41,10 +41,29 @@ const StyledChoiceChip = styled.div`
       max-width: 46%;
     }
   }
+
+  @media screen and (min-width: 1024px) {
+    box-shadow: inset 0px -16px 1px -5px rgba(0, 0, 0, 0.25);
+    height: var(--lg-chip-size);
+    min-height: var(--lg-chip-size);
+    width: var(--lg-chip-size);
+
+    .choice-chip-inner {
+      box-shadow: inset 0px 16px 1px -5px rgba(0, 0, 0, 0.12);
+      height: var(--lg-chip-inner-size);
+      width: var(--lg-chip-inner-size);
+
+      img {
+        width: 104px;
+        max-height: unset;
+        max-width: unset;
+      }
+    }
+  }
 `;
 
 const StyledCircle = styled.div`
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 50%;
   position: absolute;
   top: -17px;
@@ -71,10 +90,17 @@ const StyledCircle = styled.div`
   &::after {
     transform: scale(1.75);
   }
+
+  @media screen and (min-width: 1024px) {
+    height: 425px;
+    width: 425px;
+    top: -60px;
+    left: -60px;
+  }
 `;
 
 const ChoiceChip = React.forwardRef(
-  ({ choice, onSelect, showCircles, scaleUp, coords }, ref) => {
+  ({ choice, onSelect, showCircles, scaleUp, coords, className }, ref) => {
     const circleRef = useRef(null);
     const chipRef = useRef(null);
 
@@ -97,6 +123,7 @@ const ChoiceChip = React.forwardRef(
 
     return (
       <div
+        className={className}
         css={`
           position: relative;
         `}

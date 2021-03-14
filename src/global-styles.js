@@ -24,6 +24,12 @@ const GlobalStyles = createGlobalStyle`
 
     --border-radius: 6px;
     --desktop-border-radius: 8px;
+
+    // chips
+    --sm-chip-size: 130px;
+    --sm-chip-inner-size: 100px;
+    --lg-chip-size: 300px;
+    --lg-chip-inner-size: 220px;
   }
 
   html {
@@ -108,13 +114,13 @@ const GlobalStyles = createGlobalStyle`
     opacity: 0;
   }
   
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 1023px) {
     .hidden-sm {
       display: none;
     }
   }
 
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 1024px) {
     .hidden-gt-sm {
       display: none;
     }
