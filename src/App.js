@@ -37,21 +37,23 @@ const App = () => {
 
   return (
     <Fragment>
-      <GlobalStyles />
-      <div
-        tabIndex={isDialogOpen ? '-1' : undefined}
-        className='container flex-column align-center flex-1'
-      >
-        <Header score={score} />
-        <Board onResultsGiven={handleResultsGiven} />
-        <BottomButtonRow>
-          <Button ref={rulesButtonRef} onClick={openDialog}>
-            Rules
-          </Button>
-        </BottomButtonRow>
-        <Attribution />
-      </div>
-      <RulesDialog isOpen={isDialogOpen} onClose={closeDialog} />
+      <React.StrictMode>
+        <GlobalStyles />
+        <div
+          tabIndex={isDialogOpen ? '-1' : undefined}
+          className='container flex-column align-center flex-1'
+        >
+          <Header score={score} />
+          <Board onResultsGiven={handleResultsGiven} />
+          <BottomButtonRow>
+            <Button ref={rulesButtonRef} onClick={openDialog}>
+              Rules
+            </Button>
+          </BottomButtonRow>
+          <Attribution />
+        </div>
+        <RulesDialog isOpen={isDialogOpen} onClose={closeDialog} />
+      </React.StrictMode>
     </Fragment>
   );
 };
