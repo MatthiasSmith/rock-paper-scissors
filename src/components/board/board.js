@@ -167,6 +167,9 @@ const Board = ({ onResultsGiven }) => {
             <div
               ref={resultsRef}
               className='hidden-gt-sm flex-column align-center'
+              role='alert'
+              aria-live='polite'
+              aria-atomic='true'
             >
               <GameResultsText results={results} />
               <Button onClick={resetGame} primary>

@@ -74,7 +74,11 @@ const MakeYourChoice = ({ onSelect }) => {
   };
 
   return (
-    <StyledMakeYourChoice ref={makeYourChoiceRef}>
+    <StyledMakeYourChoice
+      ref={makeYourChoiceRef}
+      aria-label='Make your choice. Rock, Paper, or Scissors.'
+      aria-live='polite'
+    >
       <div className='bg-triangle fade-out'></div>
       <div className='flex-row space-between top-row'>
         <StyledChoiceChip

@@ -40,7 +40,7 @@ const StyledScoreCard = styled.div`
 
 const ScoreCard = ({ score }) => {
   return (
-    <StyledScoreCard>
+    <StyledScoreCard role='status' aria-live='polite' aria-atomic='true'>
       <h2 className='score-text'>Score</h2>
       <h3 className='score-value'>{score}</h3>
     </StyledScoreCard>

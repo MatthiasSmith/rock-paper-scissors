@@ -185,12 +185,17 @@ const SelectedChoices = React.forwardRef(
             choice={playerChoice}
             showCircles={results === GAME_RESULTS.WIN}
           />
-          <h3 className='fade-in'>You picked</h3>
+          <h3 className='fade-in' role='alert' aria-live='assertive'>
+            You picked <span className='sr-only'>{playerChoice.title}</span>
+          </h3>
         </div>
         {results ? (
           <div
             ref={resultsRef}
             className='hidden-sm flex-column align-center results-container relative-z-index-1'
+            role='alert'
+            aria-live='polite'
+            aria-atomic='true'
           >
             <GameResultsText results={results} />
             <Button onClick={onPlayAgain} primary>
@@ -204,13 +209,17 @@ const SelectedChoices = React.forwardRef(
               className='choice-chip'
               ref={houseChoiceRef}
               choice={houseChoice}
-              scaleUp={true}
               showCircles={results === GAME_RESULTS.LOSE}
             />
           ) : (
             <div className='blank-choice'></div>
           )}
-          <h3>The house picked</h3>
+          <h3 role='alert' aria-live='assertive'>
+            The house picked{' '}
+            {houseChoice ? (
+              <span className='sr-only'>{houseChoice.title}</span>
+            ) : null}
+          </h3>
         </div>
       </StyledSelectedChoices>
     );
