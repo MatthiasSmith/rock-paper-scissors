@@ -146,10 +146,10 @@ const ChoiceChip = React.forwardRef(
       >
         <StyledChoiceChip
           {...choice}
+          className='flex-column justify-center align-center'
           ref={ref ? ref : chipRef}
           onClick={isButton ? handleClick : undefined}
           tabIndex={isButton ? 0 : undefined}
-          className='flex-column justify-center align-center'
           role={isButton ? 'button' : undefined}
           aria-label={`${choice.title} choice${isButton ? ' button' : ''}.`}
         >

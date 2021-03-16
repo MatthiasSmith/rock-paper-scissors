@@ -47,7 +47,6 @@ const Board = ({ onResultsGiven }) => {
   const [results, setResults] = useState('');
   const [choiceCoords, setChoiceCoords] = useState({ x: 0, y: 0 });
   const playAreaRef = useRef(null);
-  const makeYourChoiceRef = useRef(null);
   const playerChoiceRef = useRef(null);
   const resultsRef = useRef(null);
 
@@ -56,25 +55,8 @@ const Board = ({ onResultsGiven }) => {
     setChoiceCoords({ x: 0, y: 0 });
   };
 
-  // TODO: move this into the MakeYourChoice component
-  const handleSelect = (choice) => {
-    if (choice.id !== CHOICE_DATA.PAPER.id) {
-      const choiceChipEl = makeYourChoiceRef.current.querySelector(
-        `[title="${choice.title}"]`
-      );
-      if (choiceChipEl) {
-        const paperChoiceEl = makeYourChoiceRef.current.querySelector(
-          `[title="paper"]`
-        );
-        const choicePos = choiceChipEl.getBoundingClientRect();
-        const paperPos = paperChoiceEl.getBoundingClientRect();
-        setChoiceCoords({
-          x: choicePos.x - paperPos.x,
-          y: choicePos.y - paperPos.y,
-        });
-      }
-    }
-
+  const handleSelect = (choice, coords) => {
+    setChoiceCoords({ ...coords });
     gsap.to('.fade-out', {
       opacity: 0,
       onComplete: () => setStep(step + 1),
@@ -90,13 +72,11 @@ const Board = ({ onResultsGiven }) => {
   };
 
   useLayoutEffect(() => {
-    const duration = 0.4;
-
     if (step === 1) {
       gsap.fromTo(
         playAreaRef.current,
         { scale: 0 },
-        { scale: 1, duration: duration, ease: 'back.out' }
+        { scale: 1, duration: 0.4, ease: 'back.out' }
       );
     }
 
@@ -153,7 +133,7 @@ const Board = ({ onResultsGiven }) => {
     <StyledBoard className='board' step={step}>
       <div ref={playAreaRef} className='play-area flex-column'>
         {step === 1 ? (
-          <MakeYourChoice ref={makeYourChoiceRef} onSelect={handleSelect} />
+          <MakeYourChoice onSelect={handleSelect} />
         ) : step === 2 ? (
           <SelectedChoices
             ref={playerChoiceRef}

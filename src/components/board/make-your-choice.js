@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 import Triangle from '../../../public/images/bg-triangle.svg';
@@ -51,19 +51,30 @@ const StyledChoiceChip = styled(ChoiceChip)`
   }
 `;
 
-const MakeYourChoice = React.forwardRef(({ onSelect }, ref) => {
+const MakeYourChoice = ({ onSelect }) => {
+  const makeYourChoiceRef = useRef(null);
+
   const handleSelect = (targetElement) => {
     const choice = Object.keys(CHOICE_DATA).find(
       (key) => CHOICE_DATA[key].id === parseInt(targetElement.id, 10)
     );
-    ref.current.querySelectorAll('[title]').forEach((el) => {
+    makeYourChoiceRef.current.querySelectorAll('[title]').forEach((el) => {
       el.id !== targetElement.id ? el.classList.add('fade-out') : () => {};
     });
-    onSelect(CHOICE_DATA[choice]);
+    const paperChoiceEl = makeYourChoiceRef.current.querySelector(
+      `[title="paper"]`
+    );
+    const choicePos = targetElement.getBoundingClientRect();
+    const paperPos = paperChoiceEl.getBoundingClientRect();
+    const coords = {
+      x: choicePos.x - paperPos.x,
+      y: choicePos.y - paperPos.y,
+    };
+    onSelect(CHOICE_DATA[choice], coords);
   };
 
   return (
-    <StyledMakeYourChoice ref={ref}>
+    <StyledMakeYourChoice ref={makeYourChoiceRef}>
       <div className='bg-triangle fade-out'></div>
       <div className='flex-row space-between top-row'>
         <StyledChoiceChip
@@ -86,6 +97,6 @@ const MakeYourChoice = React.forwardRef(({ onSelect }, ref) => {
       </div>
     </StyledMakeYourChoice>
   );
-});
+};
 
 export default MakeYourChoice;
