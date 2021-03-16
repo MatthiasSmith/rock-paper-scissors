@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { DESKTOP_CHOICE_SIZE, DESKTOP_CHOICE_SCALE } from './constants';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -25,11 +26,12 @@ const GlobalStyles = createGlobalStyle`
     --border-radius: 6px;
     --desktop-border-radius: 8px;
 
-    // chips
+    // choice chips
     --sm-chip-size: 130px;
     --sm-chip-inner-size: 100px;
-    --lg-chip-size: 300px;
-    --lg-chip-inner-size: 220px;
+    --lg-chip-size: ${DESKTOP_CHOICE_SIZE}px;
+    --lg-chip-inner-size: ${Math.ceil(DESKTOP_CHOICE_SIZE * 0.733)}px;
+    --desktop-choice-scale: ${DESKTOP_CHOICE_SCALE};
   }
 
   html {

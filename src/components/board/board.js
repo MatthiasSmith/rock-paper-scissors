@@ -6,7 +6,7 @@ import Button from '../button';
 import MakeYourChoice from './make-your-choice';
 import SelectedChoices from './selected-choices';
 import GameResultsText from './game-results-text';
-import { gameChoiceData, gameResults } from '../../data/data';
+import { CHOICE_DATA, GAME_RESULTS } from '../../constants';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -58,7 +58,7 @@ const Board = ({ onResultsGiven }) => {
 
   // TODO: move this into the MakeYourChoice component
   const handleSelect = (choice) => {
-    if (choice.id !== gameChoiceData.PAPER.id) {
+    if (choice.id !== CHOICE_DATA.PAPER.id) {
       const choiceChipEl = makeYourChoiceRef.current.querySelector(
         `[title="${choice.title}"]`
       );
@@ -116,32 +116,30 @@ const Board = ({ onResultsGiven }) => {
 
   const makeHouseChoice = () => {
     const rand = Math.ceil(Math.random() * 100) % 3;
-    const choice = Object.keys(gameChoiceData).find(
-      (item) => gameChoiceData[item].id === rand + 1
+    const choice = Object.keys(CHOICE_DATA).find(
+      (item) => CHOICE_DATA[item].id === rand + 1
     );
-    setHouseChoice(gameChoiceData[choice]);
+    setHouseChoice(CHOICE_DATA[choice]);
   };
 
   const determineWinner = () => {
     let result = '';
 
     if (playerChoice === houseChoice) {
-      result = gameResults.DRAW;
-    } else if (playerChoice === gameChoiceData.ROCK) {
+      result = GAME_RESULTS.DRAW;
+    } else if (playerChoice === CHOICE_DATA.ROCK) {
       result =
-        houseChoice === gameChoiceData.SCISSORS
-          ? gameResults.WIN
-          : gameResults.LOSE;
-    } else if (playerChoice === gameChoiceData.PAPER) {
+        houseChoice === CHOICE_DATA.SCISSORS
+          ? GAME_RESULTS.WIN
+          : GAME_RESULTS.LOSE;
+    } else if (playerChoice === CHOICE_DATA.PAPER) {
       result =
-        houseChoice === gameChoiceData.ROCK
-          ? gameResults.WIN
-          : gameResults.LOSE;
-    } else if (playerChoice === gameChoiceData.SCISSORS) {
+        houseChoice === CHOICE_DATA.ROCK ? GAME_RESULTS.WIN : GAME_RESULTS.LOSE;
+    } else if (playerChoice === CHOICE_DATA.SCISSORS) {
       result =
-        houseChoice === gameChoiceData.PAPER
-          ? gameResults.WIN
-          : gameResults.LOSE;
+        houseChoice === CHOICE_DATA.PAPER
+          ? GAME_RESULTS.WIN
+          : GAME_RESULTS.LOSE;
     }
 
     return result;

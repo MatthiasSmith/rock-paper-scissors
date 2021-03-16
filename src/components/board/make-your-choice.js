@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Triangle from '../../../public/images/bg-triangle.svg';
 import ChoiceChip from '../choice-chip';
-import { gameChoiceData } from '../../data/data';
+import { CHOICE_DATA } from '../../constants';
 
 const StyledMakeYourChoice = styled.div`
   position: relative;
@@ -43,25 +43,23 @@ const StyledMakeYourChoice = styled.div`
 
 const StyledChoiceChip = styled(ChoiceChip)`
   @media screen and (min-width: 1024px) {
-    transform: scale(0.669) translateY(-25%);
+    transform: scale(var(--desktop-choice-scale)) translateY(-25%);
 
     &:only-of-type {
-      transform: scale(0.669) translateY(-75%);
+      transform: scale(var(--desktop-choice-scale)) translateY(-75%);
     }
   }
 `;
 
 const MakeYourChoice = React.forwardRef(({ onSelect }, ref) => {
-  const handleSelect = (event) => {
-    const choice = Object.keys(gameChoiceData).find(
-      (key) => gameChoiceData[key].id === parseInt(event.currentTarget.id, 10)
+  const handleSelect = (targetElement) => {
+    const choice = Object.keys(CHOICE_DATA).find(
+      (key) => CHOICE_DATA[key].id === parseInt(targetElement.id, 10)
     );
     ref.current.querySelectorAll('[title]').forEach((el) => {
-      el.id !== event.currentTarget.id
-        ? el.classList.add('fade-out')
-        : () => {};
+      el.id !== targetElement.id ? el.classList.add('fade-out') : () => {};
     });
-    onSelect(gameChoiceData[choice]);
+    onSelect(CHOICE_DATA[choice]);
   };
 
   return (
@@ -70,19 +68,19 @@ const MakeYourChoice = React.forwardRef(({ onSelect }, ref) => {
       <div className='flex-row space-between top-row'>
         <StyledChoiceChip
           className='choice-chip'
-          choice={gameChoiceData.PAPER}
+          choice={CHOICE_DATA.PAPER}
           onSelect={handleSelect}
         />
         <StyledChoiceChip
           className='choice-chip'
-          choice={gameChoiceData.SCISSORS}
+          choice={CHOICE_DATA.SCISSORS}
           onSelect={handleSelect}
         />
       </div>
       <div className='flex-row justify-center'>
         <StyledChoiceChip
           className='choice-chip'
-          choice={gameChoiceData.ROCK}
+          choice={CHOICE_DATA.ROCK}
           onSelect={handleSelect}
         />
       </div>

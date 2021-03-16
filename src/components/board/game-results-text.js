@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { gameResults } from '../../data/data';
+import { GAME_RESULTS } from '../../constants';
 
 const StyledGameResultsText = styled.h2`
   margin: 0 auto;
@@ -18,9 +18,9 @@ const StyledGameResultsText = styled.h2`
 const GameResultsText = ({ results }) => {
   return (
     <StyledGameResultsText>
-      {results === gameResults.DRAW
+      {results === GAME_RESULTS.DRAW
         ? 'Draw'
-        : results === gameResults.WIN
+        : results === GAME_RESULTS.WIN
         ? 'You Win'
         : 'You Lose'}
     </StyledGameResultsText>

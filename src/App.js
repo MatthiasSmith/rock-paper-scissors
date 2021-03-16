@@ -6,8 +6,8 @@ import Button from './components/button';
 import Board from './components/board/board';
 import Attribution from './components/attribution';
 import RulesDialog from './components/rules-dialog';
-import { gameResults } from './data/data';
 import BottomButtonRow from './components/bottom-button-row';
+import { GAME_RESULTS } from './constants';
 
 const App = () => {
   const [score, setScore] = useState(0);
@@ -25,9 +25,9 @@ const App = () => {
 
   const handleResultsGiven = (result) => {
     setScore(
-      result === gameResults.WIN
+      result === GAME_RESULTS.WIN
         ? score + 1
-        : result === gameResults.LOSE
+        : result === GAME_RESULTS.LOSE
         ? score - 1 < 0
           ? score
           : score - 1

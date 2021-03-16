@@ -116,9 +116,22 @@ const ChoiceChip = React.forwardRef(
 
     const handleClick = (event) => {
       if (!onSelect) return;
-      gsap.to(chipRef.current, { scale: 0.95, duration: 0.05 });
-      gsap.to(chipRef.current, { scale: 1, duration: 0.05, delay: 0.05 });
-      onSelect(event);
+      /*
+       *  Set a reference to event.currentTarget to pass into the onComplete callback.
+       *  See why here https://developer.mozilla.org/en-US/docs/Web/API/Event/currentTarget
+       */
+      const currentTarget = event.currentTarget;
+      const tl = gsap.timeline({
+        onComplete: (currentTarget) => onSelect(currentTarget),
+        onCompleteParams: [currentTarget],
+      });
+      tl.to(chipRef.current, { scale: 0.92, duration: 0.02 });
+      tl.to(chipRef.current, {
+        scale: 1,
+        duration: 0.4,
+        delay: 0.05,
+        ease: 'bounce.out',
+      });
     };
 
     return (

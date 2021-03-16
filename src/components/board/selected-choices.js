@@ -5,7 +5,11 @@ import { gsap } from 'gsap';
 import ChoiceChip from '../choice-chip';
 import GameResultsText from './game-results-text';
 import Button from '../button';
-import { gameResults } from '../../data/data';
+import {
+  GAME_RESULTS,
+  DESKTOP_CHOICE_SIZE,
+  DESKTOP_CHOICE_SCALE,
+} from '../../constants';
 
 const StyledSelectedChoices = styled.div`
   margin-bottom: 4rem;
@@ -123,8 +127,7 @@ const SelectedChoices = React.forwardRef(
             ref={playerChoiceRef}
             className='choice-chip'
             choice={playerChoice}
-            coords={startingCoords}
-            showCircles={results === gameResults.WIN}
+            showCircles={results === GAME_RESULTS.WIN}
           />
           <h3 className='fade-in'>You picked</h3>
         </div>
@@ -146,7 +149,7 @@ const SelectedChoices = React.forwardRef(
               ref={houseChoiceRef}
               choice={houseChoice}
               scaleUp={true}
-              showCircles={results === gameResults.LOSE}
+              showCircles={results === GAME_RESULTS.LOSE}
             />
           ) : (
             <div className='blank-choice'></div>
