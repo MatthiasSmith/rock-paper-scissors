@@ -32,7 +32,8 @@ const StyledHeader = styled.header`
 const Header = ({ score }) => {
   return (
     <StyledHeader className='flex-row space-between align-center'>
-      <img src={Logo} alt='Rock Paper Scissors' />
+      <h1 className='sr-only'>Rock Paper Scissors</h1>
+      <img src={Logo} alt='Rock Paper Scissors logo.' />
       <ScoreCard score={score} />
     </StyledHeader>
   );

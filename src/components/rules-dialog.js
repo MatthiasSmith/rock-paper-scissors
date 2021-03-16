@@ -160,7 +160,7 @@ const RulesDialog = ({ isOpen, onClose }) => {
         <Button
           className='close-button hidden-gt-sm'
           onClick={onClose}
-          aria-label='Close this dialog.'
+          aria-label='Close the Rock Paper Scissors rules dialog.'
         >
           <img src={IconClose} alt='Close icon.' />
         </Button>
