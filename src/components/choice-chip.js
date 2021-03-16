@@ -2,6 +2,8 @@ import React, { useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 
+import { DESKTOP_BREAKPOINT } from '../constants';
+
 const StyledChoiceChip = styled.div`
   background-image: ${(props) =>
     props.title ? `var(--${props.title}-gradient)` : undefined};
@@ -41,7 +43,7 @@ const StyledChoiceChip = styled.div`
     }
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     box-shadow: inset 0px -16px 1px -5px rgba(0, 0, 0, 0.25);
     height: var(--lg-chip-size);
     min-height: var(--lg-chip-size);
@@ -89,7 +91,7 @@ const StyledCircle = styled.div`
     transform: scale(1.75);
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     height: 425px;
     width: 425px;
     top: -60px;

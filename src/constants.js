@@ -14,5 +14,6 @@ export const GAME_RESULTS = {
   DRAW: 'draw',
 };
 
+export const DESKTOP_BREAKPOINT = 1024;
 export const DESKTOP_CHOICE_SIZE = 300;
 export const DESKTOP_CHOICE_SCALE = 0.669;

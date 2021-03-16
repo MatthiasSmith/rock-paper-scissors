@@ -7,6 +7,7 @@ import GameResultsText from './game-results-text';
 import Button from '../button';
 import {
   GAME_RESULTS,
+  DESKTOP_BREAKPOINT,
   DESKTOP_CHOICE_SIZE,
   DESKTOP_CHOICE_SCALE,
 } from '../../constants';
@@ -42,7 +43,7 @@ const StyledSelectedChoices = styled.div`
     }
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     min-width: 664px;
 
     h3 {
@@ -72,7 +73,7 @@ const StyledSelectedChoices = styled.div`
 `;
 
 const StyledChoiceChip = styled(ChoiceChip)`
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     order: 2;
   }
 `;
@@ -92,7 +93,8 @@ const SelectedChoices = React.forwardRef(
     const houseChoiceRef = useRef(null);
     const resultsRef = useRef(null);
     const playerChoiceRef = useRef(null);
-    const isSmScreen = document.documentElement.clientWidth < 1024;
+    const isSmScreen =
+      document.documentElement.clientWidth < DESKTOP_BREAKPOINT;
 
     useLayoutEffect(() => {
       if (!houseChoice) {

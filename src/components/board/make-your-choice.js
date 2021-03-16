@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Triangle from '../../../public/images/bg-triangle.svg';
 import ChoiceChip from '../choice-chip';
-import { CHOICE_DATA } from '../../constants';
+import { CHOICE_DATA, DESKTOP_BREAKPOINT } from '../../constants';
 
 const StyledMakeYourChoice = styled.div`
   position: relative;
@@ -26,7 +26,7 @@ const StyledMakeYourChoice = styled.div`
     margin-bottom: 1rem;
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     .bg-triangle {
       background-position: center bottom;
       width: 480px;
@@ -42,7 +42,7 @@ const StyledMakeYourChoice = styled.div`
 `;
 
 const StyledChoiceChip = styled(ChoiceChip)`
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     transform: scale(var(--desktop-choice-scale)) translateY(-25%);
 
     &:only-of-type {

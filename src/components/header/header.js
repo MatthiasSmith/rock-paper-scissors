@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ScoreCard from './score-card';
 
 import Logo from '../../../public/images/logo.svg';
+import { DESKTOP_BREAKPOINT } from '../../constants';
 
 const StyledHeader = styled.header`
   border: 3px solid var(--header-outline);
@@ -16,7 +17,7 @@ const StyledHeader = styled.header`
     height: 3.1rem;
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     border-radius: 14px;
     width: 705px;
     margin-top: 2.9rem;

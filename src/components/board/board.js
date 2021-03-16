@@ -6,7 +6,7 @@ import Button from '../button';
 import MakeYourChoice from './make-your-choice';
 import SelectedChoices from './selected-choices';
 import GameResultsText from './game-results-text';
-import { CHOICE_DATA, GAME_RESULTS } from '../../constants';
+import { CHOICE_DATA, GAME_RESULTS, DESKTOP_BREAKPOINT } from '../../constants';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ const StyledBoard = styled.div`
     }
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     margin-bottom: 0;
 
     .play-area {

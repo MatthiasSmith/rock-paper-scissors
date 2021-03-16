@@ -1,5 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
-import { DESKTOP_CHOICE_SIZE, DESKTOP_CHOICE_SCALE } from './constants';
+import {
+  DESKTOP_BREAKPOINT,
+  DESKTOP_CHOICE_SIZE,
+  DESKTOP_CHOICE_SCALE,
+} from './constants';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -112,13 +116,13 @@ const GlobalStyles = createGlobalStyle`
     z-index: 1;
   }
   
-  @media screen and (max-width: 1023px) {
+  @media screen and (max-width: ${DESKTOP_BREAKPOINT - 1}px) {
     .hidden-sm {
       display: none;
     }
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     .hidden-gt-sm {
       display: none;
     }

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { DESKTOP_BREAKPOINT } from '../../constants';
+
 const StyledScoreCard = styled.div`
   background: white;
   border-radius: var(--border-radius);
@@ -21,7 +23,7 @@ const StyledScoreCard = styled.div`
     line-height: 1em;
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     border-radius: var(--desktop-border-radius);
     padding: 1.1rem;
     width: 150px;

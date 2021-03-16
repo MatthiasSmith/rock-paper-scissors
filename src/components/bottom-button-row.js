@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { DESKTOP_BREAKPOINT } from '../constants';
+
 const StyledBottomButtonRow = styled.div`
   margin-bottom: 2.5rem;
   justify-content: flex-end;
   width: 100%;
   align-items: center;
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     align-items: flex-end;
   }
 `;
