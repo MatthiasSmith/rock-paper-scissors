@@ -14,7 +14,7 @@ const StyledBottomButtonRow = styled.div`
 
 const BottomButtonRow = (props) => {
   return (
-    <StyledBottomButtonRow className='flex-column flex-1'>
+    <StyledBottomButtonRow className='flex-column flex-1 relative-z-index-1'>
       {props.children}
     </StyledBottomButtonRow>
   );

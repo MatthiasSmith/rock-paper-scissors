@@ -1,16 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 
 const StyledChoiceChip = styled.div`
   background-image: ${(props) =>
-    props.title === 'rock'
-      ? 'var(--rock-gradient)'
-      : props.title === 'paper'
-      ? 'var(--paper-gradient)'
-      : 'var(--scissors-gradient)'};
-  box-shadow: inset 0px -10px 1px -5px rgba(0, 0, 0, 0.25);
+    props.title ? `var(--${props.title}-gradient)` : undefined};
   border-radius: 50%;
+  box-shadow: inset 0px -10px 1px -5px rgba(0, 0, 0, 0.25);
   cursor: ${(props) =>
     props.onClick && typeof props.onClick === 'function'
       ? 'pointer'
@@ -19,12 +15,15 @@ const StyledChoiceChip = styled.div`
   min-height: var(--sm-chip-size);
   width: var(--sm-chip-size);
   overflow: hidden;
-  transform: ${(props) =>
-    props.coords
-      ? `translate(${props.coords.x}px, ${props.coords.y}px)`
-      : props.scaleUp
-      ? `scale(0)`
-      : `translate(0px, 0px)`};
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:focus-visible {
+    outline: 5px auto Highlight;
+    outline: 5px auto -webkit-focus-ring-color;
+  }
 
   .choice-chip-inner {
     background-color: hsl(0, 0%, 87%);
@@ -71,7 +70,6 @@ const StyledCircle = styled.div`
   width: 164px;
   height: 164px;
   z-index: -1;
-  transform: scale(0);
 
   &::before,
   &::after {
@@ -100,17 +98,22 @@ const StyledCircle = styled.div`
 `;
 
 const ChoiceChip = React.forwardRef(
-  ({ choice, onSelect, showCircles, scaleUp, coords, className }, ref) => {
+  ({ choice, onSelect, showCircles, className }, ref) => {
     const circleRef = useRef(null);
     const chipRef = useRef(null);
+    const isButton = onSelect && typeof onSelect === 'function';
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       showCircles
-        ? gsap.to(circleRef.current, {
-            scale: 1,
-            duration: 1.5,
-            ease: 'elastic.out',
-          })
+        ? gsap.fromTo(
+            circleRef.current,
+            { scale: 0 },
+            {
+              scale: 1,
+              duration: 1.5,
+              ease: 'elastic.out',
+            }
+          )
         : () => {};
     }, [showCircles]);
 
@@ -144,21 +147,14 @@ const ChoiceChip = React.forwardRef(
         <StyledChoiceChip
           {...choice}
           ref={ref ? ref : chipRef}
-          onClick={
-            onSelect && typeof onSelect === 'function' ? handleClick : undefined
-          }
-          tabIndex={onSelect && typeof onSelect === 'function' ? 0 : undefined}
-          className={`flex-column justify-center align-center ${
-            scaleUp ? 'scale-up' : ''
-          }`}
-          coords={coords}
-          scaleUp={scaleUp}
-          role={
-            onSelect && typeof onSelect === 'function' ? 'button' : undefined
-          }
+          onClick={isButton ? handleClick : undefined}
+          tabIndex={isButton ? 0 : undefined}
+          className='flex-column justify-center align-center'
+          role={isButton ? 'button' : undefined}
+          aria-label={`${choice.title} choice${isButton ? ' button' : ''}.`}
         >
           <div className='choice-chip-inner flex-column justify-center align-center'>
-            <img src={choice.imageSrc} alt={choice.title} />
+            <img src={choice.imageSrc} alt={`${choice.title} icon.`} />
           </div>
         </StyledChoiceChip>
         {showCircles ? <StyledCircle ref={circleRef} /> : null}

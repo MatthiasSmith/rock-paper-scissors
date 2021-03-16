@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useEffect, useState } from 'react';
+import React, { Fragment, useRef, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 
@@ -18,7 +18,7 @@ const StyledBoard = styled.div`
 
   .play-area {
     height: 330px;
-    width: 319px;
+    width: 320px;
 
     .mb-1 {
       margin-bottom: 1rem;
@@ -75,7 +75,7 @@ const Board = ({ onResultsGiven }) => {
       }
     }
 
-    gsap.to(makeYourChoiceRef.current.querySelectorAll('.fade-out'), {
+    gsap.to('.fade-out', {
       opacity: 0,
       onComplete: () => setStep(step + 1),
     });
@@ -89,7 +89,7 @@ const Board = ({ onResultsGiven }) => {
     }, 1250);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const duration = 0.4;
 
     if (step === 1) {
@@ -110,7 +110,11 @@ const Board = ({ onResultsGiven }) => {
     }
 
     if (step === 4) {
-      gsap.to(resultsRef.current, { opacity: 1, duration: 0.5 });
+      gsap.fromTo(
+        resultsRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5 }
+      );
     }
   }, [step]);
 
@@ -173,7 +177,7 @@ const Board = ({ onResultsGiven }) => {
             />
             <div
               ref={resultsRef}
-              className='hidden-gt-sm flex-column align-center fade-in'
+              className='hidden-gt-sm flex-column align-center'
             >
               <GameResultsText results={results} />
               <Button onClick={resetGame} primary>

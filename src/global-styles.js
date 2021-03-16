@@ -96,15 +96,6 @@ const GlobalStyles = createGlobalStyle`
     align-items: center;
   }
 
-  // typography
-  .text-center {
-    text-align: center;
-  }
-
-  .text-uppercase {
-    text-transform: uppercase;
-  }
-
   // utility
   .sr-only:not(:focus):not(:active) {
     clip: rect(0 0 0 0); 
@@ -116,8 +107,9 @@ const GlobalStyles = createGlobalStyle`
     width: 1px;
   }
 
-  .fade-in {
-    opacity: 0;
+  .relative-z-index-1 {
+    position: relative;
+    z-index: 1;
   }
   
   @media screen and (max-width: 1023px) {

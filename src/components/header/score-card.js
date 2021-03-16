@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const StyledScoreCard = styled.div`
   background: white;
   border-radius: var(--border-radius);
+  text-align: center;
   padding: 0.6rem;
   width: 80px;
 
@@ -37,9 +38,9 @@ const StyledScoreCard = styled.div`
 
 const ScoreCard = ({ score }) => {
   return (
-    <StyledScoreCard className='text-center'>
-      <h3 className='score-text text-uppercase'>Score</h3>
-      <h2 className='score-value'>{score}</h2>
+    <StyledScoreCard>
+      <h2 className='score-text'>Score</h2>
+      <h3 className='score-value'>{score}</h3>
     </StyledScoreCard>
   );
 };
