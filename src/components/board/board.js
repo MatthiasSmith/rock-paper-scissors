@@ -109,21 +109,30 @@ const Board = ({ onResultsGiven }) => {
   const determineWinner = () => {
     let result = '';
 
-    if (playerChoice === houseChoice) {
-      result = GAME_RESULTS.DRAW;
-    } else if (playerChoice === CHOICE_DATA.ROCK) {
-      result =
-        houseChoice === CHOICE_DATA.SCISSORS
-          ? GAME_RESULTS.WIN
-          : GAME_RESULTS.LOSE;
-    } else if (playerChoice === CHOICE_DATA.PAPER) {
-      result =
-        houseChoice === CHOICE_DATA.ROCK ? GAME_RESULTS.WIN : GAME_RESULTS.LOSE;
-    } else if (playerChoice === CHOICE_DATA.SCISSORS) {
-      result =
-        houseChoice === CHOICE_DATA.PAPER
-          ? GAME_RESULTS.WIN
-          : GAME_RESULTS.LOSE;
+    switch (playerChoice) {
+      case houseChoice:
+        result = GAME_RESULTS.DRAW;
+        break;
+      case CHOICE_DATA.ROCK:
+        result =
+          houseChoice === CHOICE_DATA.SCISSORS
+            ? GAME_RESULTS.WIN
+            : GAME_RESULTS.LOSE;
+        break;
+      case CHOICE_DATA.PAPER:
+        result =
+          houseChoice === CHOICE_DATA.ROCK
+            ? GAME_RESULTS.WIN
+            : GAME_RESULTS.LOSE;
+        break;
+      case CHOICE_DATA.SCISSORS:
+        result =
+          houseChoice === CHOICE_DATA.PAPER
+            ? GAME_RESULTS.WIN
+            : GAME_RESULTS.LOSE;
+        break;
+      default:
+        break;
     }
 
     return result;
