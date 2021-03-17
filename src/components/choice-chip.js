@@ -100,7 +100,7 @@ const StyledCircle = styled.div`
 `;
 
 const ChoiceChip = React.forwardRef(
-  ({ choice, onSelect, showCircles, className }, ref) => {
+  ({ choice, onSelect, showCircles, className, isReducedMotion }, ref) => {
     const circleRef = useRef(null);
     const chipRef = useRef(null);
     const isButton = onSelect && typeof onSelect === 'function';
@@ -112,7 +112,7 @@ const ChoiceChip = React.forwardRef(
             { scale: 0 },
             {
               scale: 1,
-              duration: 1.5,
+              duration: !isReducedMotion ? 1.5 : 0,
               ease: 'elastic.out',
             }
           )
@@ -130,13 +130,19 @@ const ChoiceChip = React.forwardRef(
         onComplete: (currentTarget) => onSelect(currentTarget),
         onCompleteParams: [currentTarget],
       });
-      tl.to(chipRef.current, { scale: 0.92, duration: 0.02 });
+      tl.to(chipRef.current, {
+        scale: 0.92,
+        duration: 0.02,
+      });
       tl.to(chipRef.current, {
         scale: 1,
         duration: 0.4,
         delay: 0.05,
         ease: 'bounce.out',
       });
+      if (isReducedMotion) {
+        tl.duration(0);
+      }
     };
 
     return (

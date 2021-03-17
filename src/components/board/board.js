@@ -40,7 +40,7 @@ const StyledBoard = styled.div`
   }
 `;
 
-const Board = ({ onResultsGiven }) => {
+const Board = ({ onResultsGiven, isReducedMotion }) => {
   const [step, setStep] = useState(1);
   const [playerChoice, setPlayerChoice] = useState(null);
   const [houseChoice, setHouseChoice] = useState(null);
@@ -59,9 +59,12 @@ const Board = ({ onResultsGiven }) => {
     setChoiceCoords({ ...coords });
     gsap.to('.fade-out', {
       opacity: 0,
-      onComplete: () => setStep(step + 1),
+      duration: !isReducedMotion ? 0.5 : 0,
+      onComplete: () => {
+        setPlayerChoice(choice);
+        setStep(step + 1);
+      },
     });
-    setPlayerChoice(choice);
   };
 
   const doStep2 = () => {
@@ -76,7 +79,7 @@ const Board = ({ onResultsGiven }) => {
       gsap.fromTo(
         playAreaRef.current,
         { scale: 0 },
-        { scale: 1, duration: 0.4, ease: 'back.out' }
+        { scale: 1, duration: !isReducedMotion ? 0.4 : 0, ease: 'back.out' }
       );
     }
 
@@ -93,7 +96,7 @@ const Board = ({ onResultsGiven }) => {
       gsap.fromTo(
         resultsRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.5 }
+        { opacity: 1, duration: !isReducedMotion ? 0.5 : 0 }
       );
     }
   }, [step]);
@@ -142,19 +145,24 @@ const Board = ({ onResultsGiven }) => {
     <StyledBoard className='board' step={step}>
       <div ref={playAreaRef} className='play-area flex-column'>
         {step === 1 ? (
-          <MakeYourChoice onSelect={handleSelect} />
+          <MakeYourChoice
+            onSelect={handleSelect}
+            isReducedMotion={isReducedMotion}
+          />
         ) : step === 2 ? (
           <SelectedChoices
             ref={playerChoiceRef}
             playerChoice={playerChoice}
             startingCoords={choiceCoords}
             onAnimateComplete={doStep2}
+            isReducedMotion={isReducedMotion}
           />
         ) : step === 3 ? (
           <SelectedChoices
             ref={playerChoiceRef}
             playerChoice={playerChoice}
             houseChoice={houseChoice}
+            isReducedMotion={isReducedMotion}
           />
         ) : (
           <Fragment>
@@ -163,6 +171,7 @@ const Board = ({ onResultsGiven }) => {
               houseChoice={houseChoice}
               results={results}
               onPlayAgain={resetGame}
+              isReducedMotion={isReducedMotion}
             />
             <div
               ref={resultsRef}

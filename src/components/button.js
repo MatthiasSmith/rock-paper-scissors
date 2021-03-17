@@ -24,6 +24,10 @@ const StyledButton = styled.button`
       padding: 0.9rem 3.6rem;
       transition: color 0.3s ease;
 
+      @media screen and (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+
       &:hover {
         color: hsl(349, 53%, 51%);
       }

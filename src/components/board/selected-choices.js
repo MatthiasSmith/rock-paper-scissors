@@ -87,6 +87,7 @@ const SelectedChoices = React.forwardRef(
       onAnimateComplete,
       results,
       onPlayAgain,
+      isReducedMotion,
     },
     ref
   ) => {
@@ -104,7 +105,7 @@ const SelectedChoices = React.forwardRef(
           {
             opacity: 1,
             delay: 0.75,
-            duration: 0.5,
+            duration: !isReducedMotion ? 0.5 : 0,
           }
         );
 
@@ -130,7 +131,7 @@ const SelectedChoices = React.forwardRef(
             y: 0,
             scale: 1,
             ease: 'power1.in',
-            duration: 0.4,
+            duration: !isReducedMotion ? 0.4 : 0,
             onComplete: () => onAnimateComplete(),
           }
         );
@@ -149,6 +150,9 @@ const SelectedChoices = React.forwardRef(
           tl.to('.player-container', { x: -133, ease: 'power1.out' }, '+=0.3');
           tl.to('.house-container', { x: 133, ease: 'power1.out' }, '-=0.5');
         }
+        if (isReducedMotion) {
+          tl.duration(0);
+        }
       }
     }, [houseChoice]);
 
@@ -158,7 +162,7 @@ const SelectedChoices = React.forwardRef(
       gsap.fromTo(
         resultsRef.current,
         { opacity: 0 },
-        { opacity: 1, ease: 'power1.out', duration: 0.4 }
+        { opacity: 1, ease: 'power1.out', duration: !isReducedMotion ? 0.4 : 0 }
       );
     }, [results]);
 
@@ -184,6 +188,7 @@ const SelectedChoices = React.forwardRef(
             className='choice-chip'
             choice={playerChoice}
             showCircles={results === GAME_RESULTS.WIN}
+            isReducedMotion={isReducedMotion}
           />
           <h3 className='fade-in' role='alert' aria-live='assertive'>
             You picked <span className='sr-only'>{playerChoice.title}</span>
@@ -210,6 +215,7 @@ const SelectedChoices = React.forwardRef(
               ref={houseChoiceRef}
               choice={houseChoice}
               showCircles={results === GAME_RESULTS.LOSE}
+              isReducedMotion={isReducedMotion}
             />
           ) : (
             <div className='blank-choice'></div>

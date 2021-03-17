@@ -78,16 +78,16 @@ const StyledDialog = styled.div`
   }
 `;
 
-const RulesDialog = ({ isOpen, onClose }) => {
+const RulesDialog = ({ isOpen, onClose, isReducedMotion }) => {
   const [gsapTL, setGsapTL] = useState(null);
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
+  const animationDuration = 0.4;
 
   useLayoutEffect(() => {
-    const duration = 0.4;
     const tl = gsap.timeline({
       paused: true,
-      defaults: { duration: duration },
+      defaults: { duration: animationDuration },
       onComplete: () => dialogRef.current.focus(),
     });
     tl.fromTo(
@@ -103,7 +103,7 @@ const RulesDialog = ({ isOpen, onClose }) => {
       backdropRef.current,
       { display: 'none', opacity: 0 },
       { display: 'block', opacity: 1 },
-      `-=${duration}`
+      `-=${animationDuration}`
     );
 
     setGsapTL(tl);
@@ -112,6 +112,7 @@ const RulesDialog = ({ isOpen, onClose }) => {
   useLayoutEffect(() => {
     if (!gsapTL) return;
 
+    isReducedMotion ? gsapTL.duration(0) : gsapTL.duration(animationDuration);
     isOpen ? gsapTL.play() : gsapTL.reverse();
   }, [isOpen]);
 

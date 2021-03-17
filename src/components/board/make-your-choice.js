@@ -51,7 +51,7 @@ const StyledChoiceChip = styled(ChoiceChip)`
   }
 `;
 
-const MakeYourChoice = ({ onSelect }) => {
+const MakeYourChoice = ({ onSelect, isReducedMotion }) => {
   const makeYourChoiceRef = useRef(null);
 
   const handleSelect = (targetElement) => {
@@ -85,11 +85,13 @@ const MakeYourChoice = ({ onSelect }) => {
           className='choice-chip'
           choice={CHOICE_DATA.PAPER}
           onSelect={handleSelect}
+          isReducedMotion={isReducedMotion}
         />
         <StyledChoiceChip
           className='choice-chip'
           choice={CHOICE_DATA.SCISSORS}
           onSelect={handleSelect}
+          isReducedMotion={isReducedMotion}
         />
       </div>
       <div className='flex-row justify-center'>
@@ -97,6 +99,7 @@ const MakeYourChoice = ({ onSelect }) => {
           className='choice-chip'
           choice={CHOICE_DATA.ROCK}
           onSelect={handleSelect}
+          isReducedMotion={isReducedMotion}
         />
       </div>
     </StyledMakeYourChoice>
