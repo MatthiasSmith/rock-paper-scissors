@@ -24,6 +24,9 @@ const App = () => {
     setIsReducedMotion(
       !storedReducedMotion ? hasOSReducedMotion : storedReducedMotion === 'true'
     );
+
+    const storedScore = localStorage.getItem('score');
+    storedScore ? setScore(parseInt(storedScore, 10)) : () => {};
   }, []);
 
   const openDialog = () => {
@@ -36,15 +39,16 @@ const App = () => {
   };
 
   const handleResultsGiven = (result) => {
-    setScore(
+    const newScore =
       result === GAME_RESULTS.WIN
         ? score + 1
         : result === GAME_RESULTS.LOSE
         ? score - 1 < 0
           ? score
           : score - 1
-        : score
-    );
+        : score;
+    setScore(newScore);
+    localStorage.setItem('score', newScore);
   };
 
   const handleReducedMotionChange = () => {
