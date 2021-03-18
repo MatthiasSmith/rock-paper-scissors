@@ -19,6 +19,7 @@ const StyledReducedMotion = styled.div`
 
 const StyledCheckbox = styled.input.attrs(() => ({ type: 'checkbox' }))`
   appearance: none;
+  border: none;
   width: 18px;
   height: 18px;
   margin-right: 0.8rem;

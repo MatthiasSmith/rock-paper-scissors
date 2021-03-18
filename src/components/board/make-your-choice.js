@@ -25,7 +25,7 @@ const StyledMakeYourChoice = styled.div`
   .bg-triangle,
   .bg-pentagon {
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center 50px;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -35,17 +35,28 @@ const StyledMakeYourChoice = styled.div`
 
   .bg-triangle {
     background-image: url(${Triangle});
-    background-size: 80%;
+    background-size: 70%;
   }
 
   .bg-pentagon {
     background-image: url(${Pentagon});
-    background-position: center 50px;
     background-size: 70%;
   }
 
   .top-row {
     margin-bottom: 1rem;
+  }
+
+  .middle-row {
+    margin-bottom: 1rem;
+
+    > div:first-of-type {
+      margin-left: -1rem;
+    }
+
+    > div:last-of-type {
+      margin-right: -1rem;
+    }
   }
 
   .bottom-row {
@@ -62,7 +73,8 @@ const StyledMakeYourChoice = styled.div`
       `}
 
     .bg-triangle {
-      background-position: center bottom;
+      background-position: center 90px;
+      background-size: 65%;
       width: 480px;
       height: 430px;
       left: 50%;
@@ -146,7 +158,7 @@ const GameArea = ({ onSelect }) => {
 const BonusGameArea = ({ onSelect }) => {
   return (
     <Fragment>
-      <div className='flex-row justify-center'>
+      <div className='flex-row justify-center top-row'>
         <StyledChoiceChip
           className='choice-chip'
           choice={CHOICE_DATA.SCISSORS}

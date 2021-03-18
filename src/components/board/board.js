@@ -24,7 +24,7 @@ const StyledBoard = styled.div`
   width: 100%;
 
   .play-area {
-    height: 330px;
+    min-height: ${(props) => (props.isBonusGame ? '389px' : '373px')};
     width: 320px;
 
     .mb-1 {
@@ -40,7 +40,7 @@ const StyledBoard = styled.div`
     margin-bottom: 0;
 
     .play-area {
-      height: 430px;
+      height: ${(props) => (props.isBonusGame ? '465px' : '430px')};
       min-width: 480px;
       width: unset;
     }
@@ -181,7 +181,7 @@ const Board = ({ onResultsGiven }) => {
   };
 
   return (
-    <StyledBoard className='board' step={step}>
+    <StyledBoard className='board' step={step} isBonusGame={isBonusGame}>
       <div className='play-area flex-column'>
         {step === 1 ? (
           <MakeYourChoice onSelect={handleSelect} />

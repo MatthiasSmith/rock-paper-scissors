@@ -11,7 +11,7 @@ const StyledHeader = styled.header`
   border: 3px solid var(--header-outline);
   border-radius: var(--border-radius);
   margin-top: 1.9rem;
-  margin-bottom: 6.5rem;
+  margin-bottom: ${(props) => (props.isBonusGame ? '5.5rem' : '6.5rem')};
   padding: 10px 10px 10px 20px;
   width: 100%;
 
@@ -27,7 +27,7 @@ const StyledHeader = styled.header`
     padding: 15px 20px 15px 30px;
 
     > img {
-      height: 100%;
+      height: 108px;
     }
   }
 `;
@@ -36,7 +36,10 @@ const Header = ({ score }) => {
   const { isBonusGame } = useContext(BonusGameContext);
 
   return (
-    <StyledHeader className='flex-row space-between align-center'>
+    <StyledHeader
+      className='flex-row space-between align-center'
+      isBonusGame={isBonusGame}
+    >
       <h1 className='sr-only'>
         {isBonusGame
           ? 'Rock Paper Scissors Lizard Spock'

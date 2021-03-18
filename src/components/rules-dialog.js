@@ -65,7 +65,7 @@ const StyledDialog = styled.div`
     align-items: unset;
     border-radius: var(--lg-border-radius);
     max-width: 400px;
-    max-height: ${(props) => (props.isBonusGame ? '461px' : '416px')};
+    max-height: ${(props) => (props.isBonusGame ? '461px' : '420px')};
     padding: 2rem 1.8rem;
 
     h2 {

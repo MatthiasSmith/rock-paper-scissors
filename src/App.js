@@ -66,7 +66,7 @@ const App = () => {
           <Board onResultsGiven={handleResultsGiven} />
           <BottomButtonRow>
             <Button onClick={changeMode} lessPadding>
-              Change Mode
+              Change Game
             </Button>
             <Button ref={rulesButtonRef} onClick={openDialog}>
               Rules

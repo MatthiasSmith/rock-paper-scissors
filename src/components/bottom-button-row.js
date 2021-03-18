@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-import styled, { css } from 'styled-components';
-import { BonusGameContext } from '../providers/bonus-game-provider';
+import styled from 'styled-components';
 
 const StyledBottomButtonRow = styled.div`
   display: flex;
@@ -8,21 +7,11 @@ const StyledBottomButtonRow = styled.div`
   justify-content: space-between;
   margin-bottom: 2rem;
   width: 100%;
-  ${(props) =>
-    props.isBonusGame &&
-    css`
-      margin-top: 2rem;
-    `}
 `;
 
 const BottomButtonRow = (props) => {
-  const { isBonusGame } = useContext(BonusGameContext);
-
   return (
-    <StyledBottomButtonRow
-      className='flex-1 relative-z-index-1'
-      isBonusGame={isBonusGame}
-    >
+    <StyledBottomButtonRow className='flex-1 relative-z-index-1'>
       {props.children}
     </StyledBottomButtonRow>
   );
