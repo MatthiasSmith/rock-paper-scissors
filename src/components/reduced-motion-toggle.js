@@ -90,7 +90,7 @@ const ReducedMotionToggle = () => {
   return (
     <StyledReducedMotion className='flex-row align-center'>
       <StyledCheckbox
-        name='reduceMotion'
+        id='reduceMotion'
         onChange={handleChange}
         checked={isReducedMotion}
       />
