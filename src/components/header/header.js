@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ScoreCard from './score-card';
 
 import Logo from '../../../public/images/logo.svg';
 import BonusLogo from '../../../public/images/logo-bonus.svg';
 import { LG_BREAKPOINT } from '../../constants';
+import { BonusGameContext } from '../../providers/bonus-game-provider';
 
 const StyledHeader = styled.header`
   border: 3px solid var(--header-outline);
@@ -31,7 +32,9 @@ const StyledHeader = styled.header`
   }
 `;
 
-const Header = ({ score, isBonusGame }) => {
+const Header = ({ score }) => {
+  const { isBonusGame } = useContext(BonusGameContext);
+
   return (
     <StyledHeader className='flex-row space-between align-center'>
       <h1 className='sr-only'>

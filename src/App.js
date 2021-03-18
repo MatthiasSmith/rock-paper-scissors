@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useLayoutEffect, useRef } from 'react';
+import React, {
+  Fragment,
+  useState,
+  useLayoutEffect,
+  useRef,
+  useContext,
+} from 'react';
 
 import GlobalStyles from './global-styles';
 import Header from './components/header/header';
@@ -9,11 +15,12 @@ import RulesDialog from './components/rules-dialog';
 import BottomButtonRow from './components/bottom-button-row';
 import ReducedMotionToggle from './components/reduced-motion-toggle';
 import { GAME_RESULTS } from './constants';
+import { BonusGameContext } from './providers/bonus-game-provider';
 
 const App = () => {
   const [score, setScore] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isBonusGame, setIsBonusGame] = useState(false);
+  const { isBonusGame, setBonusGame } = useContext(BonusGameContext);
   const rulesButtonRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -44,7 +51,7 @@ const App = () => {
   };
 
   const changeMode = () => {
-    setIsBonusGame(!isBonusGame);
+    setBonusGame(!isBonusGame);
   };
 
   return (
@@ -55,12 +62,9 @@ const App = () => {
           tabIndex={isDialogOpen ? '-1' : undefined}
           className='container flex-column align-center flex-1'
         >
-          <Header score={score} isBonusGame={isBonusGame} />
-          <Board
-            onResultsGiven={handleResultsGiven}
-            isBonusGame={isBonusGame}
-          />
-          <BottomButtonRow isBonusGame={isBonusGame}>
+          <Header score={score} />
+          <Board onResultsGiven={handleResultsGiven} />
+          <BottomButtonRow>
             <Button onClick={changeMode} lessPadding>
               Change Mode
             </Button>
@@ -71,11 +75,7 @@ const App = () => {
           <ReducedMotionToggle />
           <Attribution />
         </div>
-        <RulesDialog
-          isOpen={isDialogOpen}
-          isBonusGame={isBonusGame}
-          onClose={closeDialog}
-        />
+        <RulesDialog isOpen={isDialogOpen} onClose={closeDialog} />
       </React.StrictMode>
     </Fragment>
   );

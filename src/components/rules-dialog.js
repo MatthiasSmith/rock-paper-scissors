@@ -14,6 +14,7 @@ import BonusRulesImage from '../../public/images/image-rules-bonus.svg';
 import Button from './button';
 
 import { ReducedMotionContext } from '../providers/reduced-motion-provider';
+import { BonusGameContext } from '../providers/bonus-game-provider';
 
 const StyledDialogBackdrop = styled.div`
   background: rgba(0, 0, 0, 0.45);
@@ -92,9 +93,10 @@ const StyledDialog = styled.div`
   }
 `;
 
-const RulesDialog = ({ isOpen, onClose, isBonusGame }) => {
+const RulesDialog = ({ isOpen, onClose }) => {
   const [gsapTL, setGsapTL] = useState(null);
   const { isReducedMotion } = useContext(ReducedMotionContext);
+  const { isBonusGame } = useContext(BonusGameContext);
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
   const animationDuration = 0.4;

@@ -14,6 +14,7 @@ import SelectedChoices from './selected-choices';
 import GameResultsText from './game-results-text';
 import { CHOICE_DATA, GAME_RESULTS, LG_BREAKPOINT } from '../../constants';
 import { ReducedMotionContext } from '../../providers/reduced-motion-provider';
+import { BonusGameContext } from '../../providers/bonus-game-provider';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -47,13 +48,14 @@ const StyledBoard = styled.div`
   }
 `;
 
-const Board = ({ onResultsGiven, isBonusGame }) => {
+const Board = ({ onResultsGiven }) => {
   const [step, setStep] = useState(1);
   const [playerChoice, setPlayerChoice] = useState(null);
   const [houseChoice, setHouseChoice] = useState(null);
   const [results, setResults] = useState('');
   const [choiceCoords, setChoiceCoords] = useState({ x: 0, y: 0 });
   const { isReducedMotion } = useContext(ReducedMotionContext);
+  const { isBonusGame } = useContext(BonusGameContext);
   const resultsRef = useRef(null);
 
   const resetGame = () => {
@@ -188,19 +190,17 @@ const Board = ({ onResultsGiven, isBonusGame }) => {
     <StyledBoard className='board' step={step}>
       <div className='play-area flex-column'>
         {step === 1 ? (
-          <MakeYourChoice onSelect={handleSelect} isBonusGame={isBonusGame} />
+          <MakeYourChoice onSelect={handleSelect} />
         ) : step === 2 ? (
           <SelectedChoices
             playerChoice={playerChoice}
             startingCoords={choiceCoords}
             onAnimateComplete={doStep2}
-            isBonusGame={isBonusGame}
           />
         ) : step === 3 ? (
           <SelectedChoices
             playerChoice={playerChoice}
             houseChoice={houseChoice}
-            isBonusGame={isBonusGame}
           />
         ) : (
           <Fragment>
@@ -209,7 +209,6 @@ const Board = ({ onResultsGiven, isBonusGame }) => {
               houseChoice={houseChoice}
               results={results}
               onPlayAgain={resetGame}
-              isBonusGame={isBonusGame}
             />
             <div
               ref={resultsRef}

@@ -7,6 +7,7 @@ import Pentagon from '../../../public/images/bg-pentagon.svg';
 import ChoiceChip from '../choice-chip';
 import { CHOICE_DATA, LG_BREAKPOINT } from '../../constants';
 import { ReducedMotionContext } from '../../providers/reduced-motion-provider';
+import { BonusGameContext } from '../../providers/bonus-game-provider';
 
 const StyledMakeYourChoice = styled.div`
   position: relative;
@@ -56,7 +57,6 @@ const StyledMakeYourChoice = styled.div`
       props.isBonusGame &&
       css`
         display: grid;
-        //grid-template-columns: 1fr 98px 2rem 98px 1fr;
         grid-template-rows: 150px 100px 150px;
         align-items: center;
       `}
@@ -186,8 +186,9 @@ const BonusGameArea = ({ onSelect }) => {
   );
 };
 
-const MakeYourChoice = ({ onSelect, isBonusGame }) => {
+const MakeYourChoice = ({ onSelect }) => {
   const { isReducedMotion } = useContext(ReducedMotionContext);
+  const { isBonusGame } = useContext(BonusGameContext);
   const makeYourChoiceRef = useRef(null);
 
   useLayoutEffect(() => {

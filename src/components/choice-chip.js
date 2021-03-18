@@ -101,7 +101,7 @@ const StyledCircle = styled.div`
 `;
 
 const ChoiceChip = React.forwardRef(
-  ({ choice, onSelect, showCircles, className, isBonusGame }, ref) => {
+  ({ choice, onSelect, showCircles, className }, ref) => {
     const { isReducedMotion } = useContext(ReducedMotionContext);
     const circleRef = useRef(null);
     const chipRef = useRef(null);
@@ -159,7 +159,6 @@ const ChoiceChip = React.forwardRef(
           className='flex-column justify-center align-center'
           ref={ref ? ref : chipRef}
           onClick={isButton ? handleClick : undefined}
-          isBonusGame={isBonusGame}
           tabIndex={isButton ? 0 : undefined}
           role={isButton ? 'button' : undefined}
           aria-label={`${choice.title} choice${isButton ? ' button' : ''}.`}

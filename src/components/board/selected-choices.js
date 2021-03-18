@@ -15,6 +15,7 @@ import {
   SM_CHOICE_SIZE,
 } from '../../constants';
 import { ReducedMotionContext } from '../../providers/reduced-motion-provider';
+import { BonusGameContext } from '../../providers/bonus-game-provider';
 
 const StyledSelectedChoices = styled.div`
   margin-bottom: 4rem;
@@ -89,9 +90,9 @@ const SelectedChoices = ({
   onAnimateComplete,
   results,
   onPlayAgain,
-  isBonusGame,
 }) => {
   const { isReducedMotion } = useContext(ReducedMotionContext);
+  const { isBonusGame } = useContext(BonusGameContext);
   const houseChoiceRef = useRef(null);
   const resultsRef = useRef(null);
   const playerChoiceRef = useRef(null);
