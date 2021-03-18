@@ -13,7 +13,6 @@ import MakeYourChoice from './make-your-choice';
 import SelectedChoices from './selected-choices';
 import GameResultsText from './game-results-text';
 import { CHOICE_DATA, GAME_RESULTS, LG_BREAKPOINT } from '../../constants';
-import { ReducedMotionContext } from '../../providers/reduced-motion-provider';
 import { BonusGameContext } from '../../providers/bonus-game-provider';
 
 const StyledBoard = styled.div`
@@ -54,8 +53,8 @@ const Board = ({ onResultsGiven }) => {
   const [houseChoice, setHouseChoice] = useState(null);
   const [results, setResults] = useState('');
   const [choiceCoords, setChoiceCoords] = useState({ x: 0, y: 0 });
-  const { isReducedMotion } = useContext(ReducedMotionContext);
   const { isBonusGame } = useContext(BonusGameContext);
+
   const resultsRef = useRef(null);
 
   const resetGame = () => {
@@ -67,7 +66,6 @@ const Board = ({ onResultsGiven }) => {
     setChoiceCoords({ ...coords });
     gsap.to('.fade-out', {
       opacity: 0,
-      duration: !isReducedMotion ? 0.5 : 0,
       onComplete: () => {
         setPlayerChoice(choice);
         setStep(step + 1);
@@ -93,11 +91,7 @@ const Board = ({ onResultsGiven }) => {
     }
 
     if (step === 4) {
-      gsap.fromTo(
-        resultsRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: !isReducedMotion ? 0.5 : 0 }
-      );
+      gsap.fromTo(resultsRef.current, { opacity: 0 }, { opacity: 1 });
     }
   }, [step]);
 

@@ -6,7 +6,7 @@ const StyledBottomButtonRow = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   width: 100%;
   ${(props) =>
     props.isBonusGame &&

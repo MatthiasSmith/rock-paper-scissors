@@ -12,6 +12,7 @@ const StyledButton = styled.button`
   font-size: 1rem;
   font-weight: var(--font-weight-semi-bold);
   letter-spacing: 2px;
+  min-height: 42px;
   padding: 0.6rem 2.25rem;
   text-transform: uppercase;
 
@@ -23,10 +24,6 @@ const StyledButton = styled.button`
       color: var(--dark-text);
       padding: 0.9rem 3.6rem;
       transition: color 0.3s ease;
-
-      @media screen and (prefers-reduced-motion: reduce) {
-        transition: none;
-      }
 
       &:hover {
         color: hsl(349, 53%, 51%);

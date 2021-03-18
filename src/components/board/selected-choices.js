@@ -97,6 +97,11 @@ const SelectedChoices = ({
   const resultsRef = useRef(null);
   const playerChoiceRef = useRef(null);
   const isSmScreen = document.documentElement.clientWidth < LG_BREAKPOINT;
+  const containerSelectors = [
+    '.player-container',
+    '.results-container',
+    '.house-container',
+  ];
 
   const calcOffset = (squareDimension, scale) => {
     return squareDimension * ((1 - scale) / 2);
@@ -110,7 +115,6 @@ const SelectedChoices = ({
         {
           opacity: 1,
           delay: 0.75,
-          duration: !isReducedMotion ? 0.5 : 0,
         }
       );
 
@@ -124,51 +128,68 @@ const SelectedChoices = ({
         scale
       );
 
-      gsap.fromTo(
-        playerChoiceRef.current,
-        {
-          x: startingCoords.x - endPos.x - offset,
-          y: startingCoords.y - endPos.y - offset,
-          scale: scale,
-        },
-        {
-          x: 0,
-          y: 0,
-          scale: 1,
-          ease: 'power1.in',
-          duration: !isReducedMotion ? 0.4 : 0,
-          onComplete: () => onAnimateComplete(),
-        }
-      );
+      isReducedMotion
+        ? gsap.fromTo(
+            playerChoiceRef.current,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.4, onComplete: () => onAnimateComplete() }
+          )
+        : gsap.fromTo(
+            playerChoiceRef.current,
+            {
+              x: startingCoords.x - endPos.x - offset,
+              y: startingCoords.y - endPos.y - offset,
+              scale: scale,
+            },
+            {
+              x: 0,
+              y: 0,
+              scale: 1,
+              ease: 'power1.in',
+              duration: 0.4,
+              onComplete: () => onAnimateComplete(),
+            }
+          );
     } else {
-      const tl = gsap.timeline({ defaultDuration: 0.3 });
-      tl.fromTo(
-        houseChoiceRef.current,
-        { scale: 0 },
-        {
-          scale: 1,
-          duration: 0.5,
-          ease: 'back.out',
-        }
-      );
+      const tl = gsap.timeline();
+      isReducedMotion
+        ? tl.fromTo(houseChoiceRef.current, { opacity: 0 }, { opacity: 1 })
+        : tl.fromTo(
+            houseChoiceRef.current,
+            { scale: 0 },
+            {
+              scale: 1,
+              ease: 'back.out',
+            }
+          );
       if (!isSmScreen) {
-        tl.to('.player-container', { x: -133, ease: 'power1.out' }, '+=0.3');
-        tl.to('.house-container', { x: 133, ease: 'power1.out' }, '-=0.5');
-      }
-      if (isReducedMotion) {
-        tl.duration(0);
+        if (isReducedMotion) {
+          tl.to(containerSelectors, { opacity: 0 }, '+=0.5');
+        } else {
+          tl.to('.player-container', { x: -133, ease: 'power1.out' }, '+=0.3');
+          tl.to('.house-container', { x: 133, ease: 'power1.out' }, '-=0.5');
+        }
       }
     }
   }, [houseChoice]);
 
   useLayoutEffect(() => {
     if (!results) return;
-    gsap.set(['.player-container', '.house-container'], { x: 0 });
-    gsap.fromTo(
-      resultsRef.current,
-      { opacity: 0 },
-      { opacity: 1, ease: 'power1.out', duration: !isReducedMotion ? 0.4 : 0 }
-    );
+
+    if (isReducedMotion && !isSmScreen) {
+      gsap.fromTo(
+        containerSelectors,
+        { opacity: 0 },
+        { stagger: 0.2, opacity: 1, ease: 'power2.out' }
+      );
+    } else {
+      gsap.set(containerSelectors, { x: 0 });
+      gsap.fromTo(
+        resultsRef.current,
+        { opacity: 0 },
+        { opacity: 1, ease: 'power1.out', duration: 0.4 }
+      );
+    }
   }, [results]);
 
   return (
@@ -207,7 +228,7 @@ const SelectedChoices = ({
             showCircles={results === GAME_RESULTS.LOSE}
           />
         ) : (
-          <div className='blank-choice'></div>
+          <div className='blank-choice fade-in'></div>
         )}
         <h3 role='alert' aria-live='polite'>
           The house picked{' '}

@@ -30,7 +30,7 @@ const StyledMakeYourChoice = styled.div`
     height: 100%;
     width: 100%;
     top: 0;
-    z-index: -1;
+    z-index: 0;
   }
 
   .bg-triangle {
@@ -192,11 +192,17 @@ const MakeYourChoice = ({ onSelect }) => {
   const makeYourChoiceRef = useRef(null);
 
   useLayoutEffect(() => {
-    gsap.fromTo(
-      makeYourChoiceRef.current,
-      { scale: 0 },
-      { scale: 1, duration: !isReducedMotion ? 0.4 : 0, ease: 'back.out' }
-    );
+    isReducedMotion
+      ? gsap.fromTo(
+          makeYourChoiceRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.4 }
+        )
+      : gsap.fromTo(
+          makeYourChoiceRef.current,
+          { scale: 0 },
+          { scale: 1, duration: 0.4, ease: 'back.out' }
+        );
   }, [isBonusGame]);
 
   const handleSelect = (targetElement) => {
@@ -204,7 +210,11 @@ const MakeYourChoice = ({ onSelect }) => {
       (key) => CHOICE_DATA[key].id === parseInt(targetElement.id, 10)
     );
     makeYourChoiceRef.current.querySelectorAll('[title]').forEach((el) => {
-      el.id !== targetElement.id ? el.classList.add('fade-out') : () => {};
+      if (isReducedMotion) {
+        el.classList.add('fade-out');
+      } else {
+        el.id !== targetElement.id ? el.classList.add('fade-out') : () => {};
+      }
     });
     const choicePos = targetElement.getBoundingClientRect();
     const coords = {

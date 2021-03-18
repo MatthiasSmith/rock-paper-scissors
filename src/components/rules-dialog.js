@@ -99,40 +99,46 @@ const RulesDialog = ({ isOpen, onClose }) => {
   const { isBonusGame } = useContext(BonusGameContext);
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
-  const animationDuration = 0.4;
   const gameTitle = isBonusGame
     ? 'Rock, Paper, Scissors, Lizard, Spock'
     : 'Rock, Paper, Scissors';
 
   useLayoutEffect(() => {
+    const duration = 0.4;
     const tl = gsap.timeline({
       paused: true,
-      defaults: { duration: animationDuration },
+      defaults: { duration: duration },
       onComplete: () => dialogRef.current.focus(),
     });
-    tl.fromTo(
-      dialogRef.current,
-      { display: 'none', xPercent: -50, yPercent: 100 },
-      {
-        yPercent: -50,
-        display: 'flex',
-        ease: 'power2.out',
-      }
-    );
+
+    isReducedMotion
+      ? tl.fromTo(
+          dialogRef.current,
+          { display: 'none', yPercent: -50, opacity: 0 },
+          { display: 'flex', yPercent: -50, opacity: 1, duration: 0.3 }
+        )
+      : tl.fromTo(
+          dialogRef.current,
+          { display: 'none', xPercent: -50, yPercent: 100, opacity: 1 },
+          {
+            yPercent: -50,
+            display: 'flex',
+            ease: 'power2.out',
+          }
+        );
+
     tl.fromTo(
       backdropRef.current,
       { display: 'none', opacity: 0 },
       { display: 'block', opacity: 1 },
-      `-=${animationDuration}`
+      `-=${duration}`
     );
 
     setGsapTL(tl);
-  }, []);
+  }, [isReducedMotion]);
 
   useLayoutEffect(() => {
     if (!gsapTL) return;
-
-    isReducedMotion ? gsapTL.duration(0) : gsapTL.duration(animationDuration);
     isOpen ? gsapTL.play() : gsapTL.reverse();
   }, [isOpen]);
 

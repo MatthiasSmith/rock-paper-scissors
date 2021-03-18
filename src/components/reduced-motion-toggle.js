@@ -1,13 +1,19 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { LG_BREAKPOINT } from '../constants';
 
 import { ReducedMotionContext } from '../providers/reduced-motion-provider';
 
 const StyledReducedMotion = styled.div`
   margin-bottom: 2rem;
+
   label {
     font-size: 0.9rem;
     letter-spacing: 0.75px;
+  }
+
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
+    align-self: flex-end;
   }
 `;
 
@@ -39,10 +45,6 @@ const StyledCheckbox = styled.input.attrs(() => ({ type: 'checkbox' }))`
     top: 0;
     left: 0;
     transition: background-color 0.1s ease-out;
-
-    @media screen and (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
   }
 
   &::after {

@@ -42,14 +42,7 @@ const Header = ({ score }) => {
           ? 'Rock Paper Scissors Lizard Spock'
           : 'Rock Paper Scissors'}
       </h1>
-      <img
-        src={isBonusGame ? BonusLogo : Logo}
-        alt={
-          isBonusGame
-            ? 'Rock Paper Scissors Lizard Spock logo.'
-            : 'Rock Paper Scissors logo.'
-        }
-      />
+      <img src={isBonusGame ? BonusLogo : Logo} alt='' />
       <ScoreCard score={score} />
     </StyledHeader>
   );

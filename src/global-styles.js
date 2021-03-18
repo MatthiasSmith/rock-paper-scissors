@@ -71,6 +71,7 @@ const GlobalStyles = createGlobalStyle`
     flex: 1;
     flex-flow: column;
     align-items: center;
+    overflow: hidden;
     padding: 0 1.75rem;
     text-transform: uppercase;
   }

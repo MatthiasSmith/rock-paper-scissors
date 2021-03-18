@@ -72,7 +72,7 @@ const StyledCircle = styled.div`
   left: -17px;
   width: 164px;
   height: 164px;
-  z-index: -1;
+  z-index: 0;
 
   &::before,
   &::after {
@@ -108,17 +108,19 @@ const ChoiceChip = React.forwardRef(
     const isButton = onSelect && typeof onSelect === 'function';
 
     useLayoutEffect(() => {
-      showCircles
-        ? gsap.fromTo(
-            circleRef.current,
-            { scale: 0 },
-            {
-              scale: 1,
-              duration: !isReducedMotion ? 1.5 : 0,
-              ease: 'elastic.out',
-            }
-          )
-        : () => {};
+      if (showCircles) {
+        isReducedMotion
+          ? gsap.fromTo(circleRef.current, { opacity: 0 }, { opacity: 1 })
+          : gsap.fromTo(
+              circleRef.current,
+              { scale: 0 },
+              {
+                scale: 1,
+                duration: 1.5,
+                ease: 'elastic.out',
+              }
+            );
+      }
     }, [showCircles]);
 
     const handleClick = (event) => {
@@ -147,6 +149,15 @@ const ChoiceChip = React.forwardRef(
       }
     };
 
+    const handleKeyDown = (event) => {
+      if (!onSelect) return;
+      event.stopPropagation();
+
+      if (event.key === 'Enter' || event.key === ' ') {
+        handleClick(event);
+      }
+    };
+
     return (
       <div
         className={className}
@@ -159,12 +170,13 @@ const ChoiceChip = React.forwardRef(
           className='flex-column justify-center align-center'
           ref={ref ? ref : chipRef}
           onClick={isButton ? handleClick : undefined}
+          onKeyDown={isButton ? handleKeyDown : undefined}
           tabIndex={isButton ? 0 : undefined}
           role={isButton ? 'button' : undefined}
           aria-label={`${choice.title} choice${isButton ? ' button' : ''}.`}
         >
           <div className='choice-chip-inner flex-column justify-center align-center'>
-            <img src={choice.imageSrc} alt={`${choice.title} icon.`} />
+            <img src={choice.imageSrc} alt='' />
           </div>
         </StyledChoiceChip>
         {showCircles ? <StyledCircle ref={circleRef} /> : null}
