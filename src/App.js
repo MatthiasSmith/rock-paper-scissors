@@ -11,21 +11,12 @@ import ReducedMotionToggle from './components/reduced-motion-toggle';
 import { GAME_RESULTS } from './constants';
 
 const App = () => {
-  const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [score, setScore] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isBonusGame, setIsBonusGame] = useState(false);
   const rulesButtonRef = useRef(null);
 
   useLayoutEffect(() => {
-    const hasOSReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-    const storedReducedMotion = localStorage.getItem('reducedMotion');
-    setIsReducedMotion(
-      !storedReducedMotion ? hasOSReducedMotion : storedReducedMotion === 'true'
-    );
-
     const storedScore = localStorage.getItem('score');
     storedScore ? setScore(parseInt(storedScore, 10)) : () => {};
   }, []);
@@ -52,11 +43,6 @@ const App = () => {
     localStorage.setItem('score', newScore);
   };
 
-  const handleReducedMotionChange = () => {
-    setIsReducedMotion(!isReducedMotion);
-    localStorage.setItem('reducedMotion', !isReducedMotion);
-  };
-
   const changeMode = () => {
     setIsBonusGame(!isBonusGame);
   };
@@ -73,7 +59,6 @@ const App = () => {
           <Board
             onResultsGiven={handleResultsGiven}
             isBonusGame={isBonusGame}
-            isReducedMotion={isReducedMotion}
           />
           <BottomButtonRow isBonusGame={isBonusGame}>
             <Button onClick={changeMode} lessPadding>
@@ -83,16 +68,12 @@ const App = () => {
               Rules
             </Button>
           </BottomButtonRow>
-          <ReducedMotionToggle
-            onChange={handleReducedMotionChange}
-            isReducedMotion={isReducedMotion}
-          />
+          <ReducedMotionToggle />
           <Attribution />
         </div>
         <RulesDialog
           isOpen={isDialogOpen}
           isBonusGame={isBonusGame}
-          isReducedMotion={isReducedMotion}
           onClose={closeDialog}
         />
       </React.StrictMode>

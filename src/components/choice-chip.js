@@ -1,8 +1,9 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useContext, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 
 import { LG_BREAKPOINT } from '../constants';
+import { ReducedMotionContext } from '../providers/reduced-motion-provider';
 
 const StyledChoiceChip = styled.div`
   background-image: ${(props) =>
@@ -100,10 +101,8 @@ const StyledCircle = styled.div`
 `;
 
 const ChoiceChip = React.forwardRef(
-  (
-    { choice, onSelect, showCircles, className, isBonusGame, isReducedMotion },
-    ref
-  ) => {
+  ({ choice, onSelect, showCircles, className, isBonusGame }, ref) => {
+    const { isReducedMotion } = useContext(ReducedMotionContext);
     const circleRef = useRef(null);
     const chipRef = useRef(null);
     const isButton = onSelect && typeof onSelect === 'function';

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+
+import { ReducedMotionContext } from '../providers/reduced-motion-provider';
 
 const StyledReducedMotion = styled.div`
   margin-bottom: 2rem;
@@ -74,12 +76,20 @@ const StyledCheckbox = styled.input.attrs(() => ({ type: 'checkbox' }))`
   }
 `;
 
-const ReducedMotionToggle = ({ onChange, isReducedMotion }) => {
+const ReducedMotionToggle = () => {
+  const { isReducedMotion, setReducedMotion } = useContext(
+    ReducedMotionContext
+  );
+
+  const handleChange = () => {
+    setReducedMotion(!isReducedMotion);
+  };
+
   return (
     <StyledReducedMotion className='flex-row align-center'>
       <StyledCheckbox
         name='reduceMotion'
-        onChange={onChange}
+        onChange={handleChange}
         checked={isReducedMotion}
       />
       <label htmlFor='reduceMotion'>Reduce Motion</label>

@@ -1,4 +1,4 @@
-import React, { Fragment, useLayoutEffect, useRef } from 'react';
+import React, { Fragment, useContext, useLayoutEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { gsap } from 'gsap';
 
@@ -6,6 +6,7 @@ import Triangle from '../../../public/images/bg-triangle.svg';
 import Pentagon from '../../../public/images/bg-pentagon.svg';
 import ChoiceChip from '../choice-chip';
 import { CHOICE_DATA, LG_BREAKPOINT } from '../../constants';
+import { ReducedMotionContext } from '../../providers/reduced-motion-provider';
 
 const StyledMakeYourChoice = styled.div`
   position: relative;
@@ -116,7 +117,7 @@ const StyledChoiceChip = styled(ChoiceChip)`
   }
 `;
 
-const GameArea = ({ onSelect, isReducedMotion }) => {
+const GameArea = ({ onSelect }) => {
   return (
     <Fragment>
       <div className='flex-row space-between top-row'>
@@ -124,13 +125,11 @@ const GameArea = ({ onSelect, isReducedMotion }) => {
           className='choice-chip'
           choice={CHOICE_DATA.PAPER}
           onSelect={onSelect}
-          isReducedMotion={isReducedMotion}
         />
         <StyledChoiceChip
           className='choice-chip'
           choice={CHOICE_DATA.SCISSORS}
           onSelect={onSelect}
-          isReducedMotion={isReducedMotion}
         />
       </div>
       <div className='flex-row justify-center'>
@@ -138,14 +137,13 @@ const GameArea = ({ onSelect, isReducedMotion }) => {
           className='choice-chip'
           choice={CHOICE_DATA.ROCK}
           onSelect={onSelect}
-          isReducedMotion={isReducedMotion}
         />
       </div>
     </Fragment>
   );
 };
 
-const BonusGameArea = ({ onSelect, isReducedMotion }) => {
+const BonusGameArea = ({ onSelect }) => {
   return (
     <Fragment>
       <div className='flex-row justify-center'>
@@ -154,7 +152,6 @@ const BonusGameArea = ({ onSelect, isReducedMotion }) => {
           choice={CHOICE_DATA.SCISSORS}
           onSelect={onSelect}
           isBonusGame={true}
-          isReducedMotion={isReducedMotion}
         />
       </div>
       <div className='flex-row space-between middle-row'>
@@ -163,14 +160,12 @@ const BonusGameArea = ({ onSelect, isReducedMotion }) => {
           choice={CHOICE_DATA.SPOCK}
           onSelect={onSelect}
           isBonusGame={true}
-          isReducedMotion={isReducedMotion}
         />
         <StyledChoiceChip
           className='choice-chip'
           choice={CHOICE_DATA.PAPER}
           onSelect={onSelect}
           isBonusGame={true}
-          isReducedMotion={isReducedMotion}
         />
       </div>
       <div className='flex-row space-between bottom-row'>
@@ -179,21 +174,20 @@ const BonusGameArea = ({ onSelect, isReducedMotion }) => {
           choice={CHOICE_DATA.LIZARD}
           onSelect={onSelect}
           isBonusGame={true}
-          isReducedMotion={isReducedMotion}
         />
         <StyledChoiceChip
           className='choice-chip'
           choice={CHOICE_DATA.ROCK}
           onSelect={onSelect}
           isBonusGame={true}
-          isReducedMotion={isReducedMotion}
         />
       </div>
     </Fragment>
   );
 };
 
-const MakeYourChoice = ({ onSelect, isBonusGame, isReducedMotion }) => {
+const MakeYourChoice = ({ onSelect, isBonusGame }) => {
+  const { isReducedMotion } = useContext(ReducedMotionContext);
   const makeYourChoiceRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -235,12 +229,9 @@ const MakeYourChoice = ({ onSelect, isBonusGame, isReducedMotion }) => {
         className={`${isBonusGame ? 'bg-pentagon' : 'bg-triangle'} fade-out`}
       ></div>
       {isBonusGame ? (
-        <BonusGameArea
-          onSelect={handleSelect}
-          isReducedMotion={isReducedMotion}
-        />
+        <BonusGameArea onSelect={handleSelect} />
       ) : (
-        <GameArea onSelect={handleSelect} isReducedMotion={isReducedMotion} />
+        <GameArea onSelect={handleSelect} />
       )}
     </StyledMakeYourChoice>
   );

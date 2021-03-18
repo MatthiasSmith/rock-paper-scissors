@@ -1,4 +1,10 @@
-import React, { Fragment, useRef, useLayoutEffect, useState } from 'react';
+import React, {
+  Fragment,
+  useRef,
+  useLayoutEffect,
+  useState,
+  useContext,
+} from 'react';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 
@@ -7,6 +13,7 @@ import MakeYourChoice from './make-your-choice';
 import SelectedChoices from './selected-choices';
 import GameResultsText from './game-results-text';
 import { CHOICE_DATA, GAME_RESULTS, LG_BREAKPOINT } from '../../constants';
+import { ReducedMotionContext } from '../../providers/reduced-motion-provider';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -40,14 +47,13 @@ const StyledBoard = styled.div`
   }
 `;
 
-const Board = ({ onResultsGiven, isBonusGame, isReducedMotion }) => {
+const Board = ({ onResultsGiven, isBonusGame }) => {
   const [step, setStep] = useState(1);
   const [playerChoice, setPlayerChoice] = useState(null);
   const [houseChoice, setHouseChoice] = useState(null);
   const [results, setResults] = useState('');
   const [choiceCoords, setChoiceCoords] = useState({ x: 0, y: 0 });
-  const playAreaRef = useRef(null);
-  const playerChoiceRef = useRef(null);
+  const { isReducedMotion } = useContext(ReducedMotionContext);
   const resultsRef = useRef(null);
 
   const resetGame = () => {
@@ -182,27 +188,19 @@ const Board = ({ onResultsGiven, isBonusGame, isReducedMotion }) => {
     <StyledBoard className='board' step={step}>
       <div className='play-area flex-column'>
         {step === 1 ? (
-          <MakeYourChoice
-            onSelect={handleSelect}
-            isBonusGame={isBonusGame}
-            isReducedMotion={isReducedMotion}
-          />
+          <MakeYourChoice onSelect={handleSelect} isBonusGame={isBonusGame} />
         ) : step === 2 ? (
           <SelectedChoices
-            ref={playerChoiceRef}
             playerChoice={playerChoice}
             startingCoords={choiceCoords}
             onAnimateComplete={doStep2}
             isBonusGame={isBonusGame}
-            isReducedMotion={isReducedMotion}
           />
         ) : step === 3 ? (
           <SelectedChoices
-            ref={playerChoiceRef}
             playerChoice={playerChoice}
             houseChoice={houseChoice}
             isBonusGame={isBonusGame}
-            isReducedMotion={isReducedMotion}
           />
         ) : (
           <Fragment>
@@ -212,7 +210,6 @@ const Board = ({ onResultsGiven, isBonusGame, isReducedMotion }) => {
               results={results}
               onPlayAgain={resetGame}
               isBonusGame={isBonusGame}
-              isReducedMotion={isReducedMotion}
             />
             <div
               ref={resultsRef}
