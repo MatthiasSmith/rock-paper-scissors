@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { DESKTOP_BREAKPOINT } from '../constants';
-
 const StyledReducedMotion = styled.div`
   margin-bottom: 2rem;
   label {
@@ -29,10 +27,10 @@ const StyledCheckbox = styled.input.attrs(() => ({ type: 'checkbox' }))`
 
   &::before {
     content: '';
+    cursor: pointer;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--border-radius);
-    cursor: pointer;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -46,9 +44,9 @@ const StyledCheckbox = styled.input.attrs(() => ({ type: 'checkbox' }))`
   }
 
   &::after {
+    content: '';
     cursor: pointer;
     box-sizing: unset;
-    content: '';
     height: 5px;
     width: 12px;
     left: 3px;
@@ -60,7 +58,6 @@ const StyledCheckbox = styled.input.attrs(() => ({ type: 'checkbox' }))`
     background: none;
     transform: rotate(-45deg) scale(0);
     transition: transform 0.1s ease-out;
-    transform-origin: center center;
 
     @media screen and (prefers-reduced-motion: reduce) {
       transition: none;

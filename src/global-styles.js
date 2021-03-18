@@ -1,8 +1,11 @@
 import { createGlobalStyle } from 'styled-components';
 import {
-  DESKTOP_BREAKPOINT,
-  DESKTOP_CHOICE_SIZE,
-  DESKTOP_CHOICE_SCALE,
+  LG_BREAKPOINT,
+  LG_CHOICE_SIZE,
+  LG_CHOICE_SCALE,
+  SM_CHOICE_SIZE,
+  BONUS_LG_CHOICE_SCALE,
+  BONUS_SM_CHOICE_SCALE,
 } from './constants';
 
 const GlobalStyles = createGlobalStyle`
@@ -12,7 +15,7 @@ const GlobalStyles = createGlobalStyle`
     --paper-gradient: linear-gradient(to top, hsl(230, 89%, 62%), hsl(230, 89%, 65%));
     --rock-gradient: linear-gradient(to top, hsl(349, 71%, 52%), hsl(349, 70%, 56%));
     --lizard-gradient: linear-gradient(to top, hsl(261, 73%, 60%), hsl(261, 72%, 63%));
-    --cyan: linear-gradient(to top, hsl(189, 59%, 53%), hsl(189, 58%, 57%));
+    --spock-gradient: linear-gradient(to top, hsl(189, 59%, 53%), hsl(189, 58%, 57%));
 
     // neutral colors
     --dark-text: hsl(229, 25%, 31%);
@@ -28,14 +31,16 @@ const GlobalStyles = createGlobalStyle`
     --font-weight-semi-bold: 600;
 
     --border-radius: 6px;
-    --desktop-border-radius: 8px;
+    --lg-border-radius: 8px;
 
     // choice chips
-    --sm-chip-size: 130px;
-    --sm-chip-inner-size: 100px;
-    --lg-chip-size: ${DESKTOP_CHOICE_SIZE}px;
-    --lg-chip-inner-size: ${Math.ceil(DESKTOP_CHOICE_SIZE * 0.733)}px;
-    --desktop-choice-scale: ${DESKTOP_CHOICE_SCALE};
+    --sm-chip-size: ${SM_CHOICE_SIZE}px;
+    --sm-chip-inner-size: ${Math.ceil(SM_CHOICE_SIZE * 0.769)}px;
+    --bonus-sm-choice-scale: ${BONUS_SM_CHOICE_SCALE};
+    --lg-chip-size: ${LG_CHOICE_SIZE}px;
+    --lg-chip-inner-size: ${Math.ceil(LG_CHOICE_SIZE * 0.733)}px;
+    --lg-choice-scale: ${LG_CHOICE_SCALE};
+    --bonus-lg-choice-scale: ${BONUS_LG_CHOICE_SCALE};
   }
 
   html {
@@ -116,13 +121,13 @@ const GlobalStyles = createGlobalStyle`
     z-index: 1;
   }
   
-  @media screen and (max-width: ${DESKTOP_BREAKPOINT - 1}px) {
+  @media screen and (max-width: ${LG_BREAKPOINT - 1}px) {
     .hidden-sm {
       display: none;
     }
   }
 
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
     .hidden-gt-sm {
       display: none;
     }

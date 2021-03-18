@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { GAME_RESULTS, DESKTOP_BREAKPOINT } from '../../constants';
+import { GAME_RESULTS, LG_BREAKPOINT } from '../../constants';
 
 const StyledGameResultsText = styled.h2`
   margin: 0 auto;
@@ -10,7 +10,7 @@ const StyledGameResultsText = styled.h2`
   font-weight: var(--font-weight-bold);
   margin-bottom: 1.25rem;
 
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
     padding-top: 4rem;
   }
 `;

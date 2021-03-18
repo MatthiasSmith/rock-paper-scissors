@@ -1,18 +1,27 @@
-import React, { useRef } from 'react';
-import styled from 'styled-components';
+import React, { Fragment, useLayoutEffect, useRef } from 'react';
+import styled, { css } from 'styled-components';
+import { gsap } from 'gsap';
 
 import Triangle from '../../../public/images/bg-triangle.svg';
+import Pentagon from '../../../public/images/bg-pentagon.svg';
 import ChoiceChip from '../choice-chip';
-import { CHOICE_DATA, DESKTOP_BREAKPOINT } from '../../constants';
+import { CHOICE_DATA, LG_BREAKPOINT } from '../../constants';
 
 const StyledMakeYourChoice = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
 
-  .bg-triangle {
-    background-image: url(${Triangle});
-    background-size: 80%;
+  ${(props) =>
+    props.isBonusGame &&
+    css`
+      display: grid;
+      grid-template-rows: 98px 85px 98px;
+      align-items: center;
+    `}
+
+  .bg-triangle,
+  .bg-pentagon {
     background-repeat: no-repeat;
     background-position: center;
     position: absolute;
@@ -22,11 +31,35 @@ const StyledMakeYourChoice = styled.div`
     z-index: -1;
   }
 
+  .bg-triangle {
+    background-image: url(${Triangle});
+    background-size: 80%;
+  }
+
+  .bg-pentagon {
+    background-image: url(${Pentagon});
+    background-position: center 50px;
+    background-size: 70%;
+  }
+
   .top-row {
     margin-bottom: 1rem;
   }
 
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+  .bottom-row {
+    margin: 3.5rem auto 0;
+  }
+
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
+    ${(props) =>
+      props.isBonusGame &&
+      css`
+        display: grid;
+        //grid-template-columns: 1fr 98px 2rem 98px 1fr;
+        grid-template-rows: 150px 100px 150px;
+        align-items: center;
+      `}
+
     .bg-triangle {
       background-position: center bottom;
       width: 480px;
@@ -35,24 +68,141 @@ const StyledMakeYourChoice = styled.div`
       transform: translateX(-50%);
     }
 
+    .bg-pentagon {
+      background-size: 55%;
+    }
+
     .top-row {
       margin-bottom: 2rem;
+    }
+
+    .middle-row {
+      width: 640px;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 150px 3.5rem 150px;
+      justify-items: center;
+      margin-top: 7.5rem;
+
+      > div:last-of-type {
+        grid-column: 3;
+      }
     }
   }
 `;
 
 const StyledChoiceChip = styled(ChoiceChip)`
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
-    transform: scale(var(--desktop-choice-scale)) translateY(-25%);
+  ${(props) =>
+    props.isBonusGame &&
+    css`
+      transform: scale(var(--bonus-sm-choice-scale));
+    `}
 
-    &:only-of-type {
-      transform: scale(var(--desktop-choice-scale)) translateY(-75%);
-    }
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
+    ${(props) =>
+      props.isBonusGame
+        ? css`
+            transform: scale(var(--bonus-lg-choice-scale));
+          `
+        : css`
+            transform: scale(var(--lg-choice-scale)) translateY(-25%);
+
+            &:only-of-type {
+              transform: scale(var(--lg-choice-scale)) translateY(-75%);
+            }
+          `}
   }
 `;
 
-const MakeYourChoice = ({ onSelect, isReducedMotion }) => {
+const GameArea = ({ onSelect, isReducedMotion }) => {
+  return (
+    <Fragment>
+      <div className='flex-row space-between top-row'>
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.PAPER}
+          onSelect={onSelect}
+          isReducedMotion={isReducedMotion}
+        />
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.SCISSORS}
+          onSelect={onSelect}
+          isReducedMotion={isReducedMotion}
+        />
+      </div>
+      <div className='flex-row justify-center'>
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.ROCK}
+          onSelect={onSelect}
+          isReducedMotion={isReducedMotion}
+        />
+      </div>
+    </Fragment>
+  );
+};
+
+const BonusGameArea = ({ onSelect, isReducedMotion }) => {
+  return (
+    <Fragment>
+      <div className='flex-row justify-center'>
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.SCISSORS}
+          onSelect={onSelect}
+          isBonusGame={true}
+          isReducedMotion={isReducedMotion}
+        />
+      </div>
+      <div className='flex-row space-between middle-row'>
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.SPOCK}
+          onSelect={onSelect}
+          isBonusGame={true}
+          isReducedMotion={isReducedMotion}
+        />
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.PAPER}
+          onSelect={onSelect}
+          isBonusGame={true}
+          isReducedMotion={isReducedMotion}
+        />
+      </div>
+      <div className='flex-row space-between bottom-row'>
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.LIZARD}
+          onSelect={onSelect}
+          isBonusGame={true}
+          isReducedMotion={isReducedMotion}
+        />
+        <StyledChoiceChip
+          className='choice-chip'
+          choice={CHOICE_DATA.ROCK}
+          onSelect={onSelect}
+          isBonusGame={true}
+          isReducedMotion={isReducedMotion}
+        />
+      </div>
+    </Fragment>
+  );
+};
+
+const MakeYourChoice = ({ onSelect, isBonusGame, isReducedMotion }) => {
   const makeYourChoiceRef = useRef(null);
+
+  useLayoutEffect(() => {
+    gsap.fromTo(
+      makeYourChoiceRef.current,
+      { scale: 0 },
+      { scale: 1, duration: !isReducedMotion ? 0.4 : 0, ease: 'back.out' }
+    );
+  }, [isBonusGame]);
 
   const handleSelect = (targetElement) => {
     const choice = Object.keys(CHOICE_DATA).find(
@@ -61,14 +211,10 @@ const MakeYourChoice = ({ onSelect, isReducedMotion }) => {
     makeYourChoiceRef.current.querySelectorAll('[title]').forEach((el) => {
       el.id !== targetElement.id ? el.classList.add('fade-out') : () => {};
     });
-    const paperChoiceEl = makeYourChoiceRef.current.querySelector(
-      `[title="paper"]`
-    );
     const choicePos = targetElement.getBoundingClientRect();
-    const paperPos = paperChoiceEl.getBoundingClientRect();
     const coords = {
-      x: choicePos.x - paperPos.x,
-      y: choicePos.y - paperPos.y,
+      x: choicePos.x,
+      y: choicePos.y,
     };
     onSelect(CHOICE_DATA[choice], coords);
   };
@@ -76,32 +222,26 @@ const MakeYourChoice = ({ onSelect, isReducedMotion }) => {
   return (
     <StyledMakeYourChoice
       ref={makeYourChoiceRef}
-      aria-label='Make your choice. Rock, Paper, or Scissors.'
+      isBonusGame={isBonusGame}
+      aria-label={`Make your choice. ${
+        isBonusGame
+          ? 'Rock, Paper, Scissors, Lizard, or Spock'
+          : 'Rock, Paper, or Scissors'
+      }.`}
       aria-live='polite'
     >
-      <div className='bg-triangle fade-out'></div>
-      <div className='flex-row space-between top-row'>
-        <StyledChoiceChip
-          className='choice-chip'
-          choice={CHOICE_DATA.PAPER}
+      <div
+        aria-hidden='true'
+        className={`${isBonusGame ? 'bg-pentagon' : 'bg-triangle'} fade-out`}
+      ></div>
+      {isBonusGame ? (
+        <BonusGameArea
           onSelect={handleSelect}
           isReducedMotion={isReducedMotion}
         />
-        <StyledChoiceChip
-          className='choice-chip'
-          choice={CHOICE_DATA.SCISSORS}
-          onSelect={handleSelect}
-          isReducedMotion={isReducedMotion}
-        />
-      </div>
-      <div className='flex-row justify-center'>
-        <StyledChoiceChip
-          className='choice-chip'
-          choice={CHOICE_DATA.ROCK}
-          onSelect={handleSelect}
-          isReducedMotion={isReducedMotion}
-        />
-      </div>
+      ) : (
+        <GameArea onSelect={handleSelect} isReducedMotion={isReducedMotion} />
+      )}
     </StyledMakeYourChoice>
   );
 };

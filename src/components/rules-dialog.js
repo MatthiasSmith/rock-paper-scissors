@@ -1,9 +1,10 @@
 import React, { Fragment, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import IconClose from '../../public/images/icon-close.svg';
 import RulesImage from '../../public/images/image-rules.svg';
+import BonusRulesImage from '../../public/images/image-rules-bonus.svg';
 import Button from './button';
 
 const StyledDialogBackdrop = styled.div`
@@ -53,22 +54,27 @@ const StyledDialog = styled.div`
 
   @media screen and (min-width: 426px) {
     align-items: unset;
-    border-radius: var(--desktop-border-radius);
+    border-radius: var(--lg-border-radius);
     max-width: 400px;
-    max-height: 416px;
+    max-height: ${(props) => (props.isBonusGame ? '461px' : '416px')};
     padding: 2rem 1.8rem;
 
     h2 {
       margin: 0;
     }
 
+    .image-container {
+      margin: 2.5rem auto 0;
+      ${(props) =>
+        props.isBonusGame &&
+        css`
+          margin-top: 1rem;
+        `}
+    }
+
     .close-button {
       margin: 0;
       padding: 0;
-    }
-
-    .image-container {
-      margin: 2.5rem auto 0;
     }
 
     // override global style
@@ -78,11 +84,14 @@ const StyledDialog = styled.div`
   }
 `;
 
-const RulesDialog = ({ isOpen, onClose, isReducedMotion }) => {
+const RulesDialog = ({ isOpen, onClose, isBonusGame, isReducedMotion }) => {
   const [gsapTL, setGsapTL] = useState(null);
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
   const animationDuration = 0.4;
+  const gameTitle = isBonusGame
+    ? 'Rock, Paper, Scissors, Lizard, Spock'
+    : 'Rock, Paper, Scissors';
 
   useLayoutEffect(() => {
     const tl = gsap.timeline({
@@ -132,6 +141,7 @@ const RulesDialog = ({ isOpen, onClose, isReducedMotion }) => {
         tabIndex='-1'
         open={isOpen}
         onKeyUp={handleKeyUp}
+        isBonusGame={isBonusGame}
         role='dialog'
         aria-labelledby='rules-header'
         aria-describedby='rules-text'
@@ -141,7 +151,7 @@ const RulesDialog = ({ isOpen, onClose, isReducedMotion }) => {
           <Button
             className='close-button hidden-xs'
             onClick={onClose}
-            aria-label='Close this dialog.'
+            aria-label={`Close the ${gameTitle} rules dialog.`}
           >
             <img src={IconClose} alt='Close icon.' />
           </Button>
@@ -149,19 +159,21 @@ const RulesDialog = ({ isOpen, onClose, isReducedMotion }) => {
         <div className='image-container flex-1'>
           <img
             className='rules-img'
-            src={RulesImage}
-            alt='The "Rock, Paper, Scissors" rules diagram.'
+            src={isBonusGame ? BonusRulesImage : RulesImage}
+            alt={`The "${gameTitle}" rules diagram.`}
           />
           <p id='rules-text' className='sr-only'>
-            The rules of "Rock, Paper, Scissors" are as follows: Rock beats
-            scissors. Scissors beats paper. And paper beats rock. If player's
-            choices are the same, it's a draw.
+            {`The rules of "${gameTitle}" are as follows: `}
+            {isBonusGame
+              ? `Scissors beats Paper. Paper beats Rock. Rock beats Lizard. Lizard beats Spock. Spock beats Scissors. Scissors beats Lizard. Paper beats Spock. Rock beats Scissors. Lizard beats Paper. Spock beats Rock. `
+              : `Rock beats scissors. Scissors beats paper. And paper beats rock. `}
+            If player's choices are the same, it's a draw.
           </p>
         </div>
         <Button
           className='close-button hidden-gt-sm'
           onClick={onClose}
-          aria-label='Close the Rock Paper Scissors rules dialog.'
+          aria-label={`Close the ${gameTitle} rules dialog.`}
         >
           <img src={IconClose} alt='Close icon.' />
         </Button>

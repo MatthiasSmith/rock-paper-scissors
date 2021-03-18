@@ -14,6 +14,7 @@ const App = () => {
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [score, setScore] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isBonusGame, setIsBonusGame] = useState(false);
   const rulesButtonRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -56,6 +57,10 @@ const App = () => {
     localStorage.setItem('reducedMotion', !isReducedMotion);
   };
 
+  const changeMode = () => {
+    setIsBonusGame(!isBonusGame);
+  };
+
   return (
     <Fragment>
       <React.StrictMode>
@@ -64,12 +69,16 @@ const App = () => {
           tabIndex={isDialogOpen ? '-1' : undefined}
           className='container flex-column align-center flex-1'
         >
-          <Header score={score} />
+          <Header score={score} isBonusGame={isBonusGame} />
           <Board
             onResultsGiven={handleResultsGiven}
+            isBonusGame={isBonusGame}
             isReducedMotion={isReducedMotion}
           />
-          <BottomButtonRow>
+          <BottomButtonRow isBonusGame={isBonusGame}>
+            <Button onClick={changeMode} lessPadding>
+              Change Mode
+            </Button>
             <Button ref={rulesButtonRef} onClick={openDialog}>
               Rules
             </Button>
@@ -82,6 +91,7 @@ const App = () => {
         </div>
         <RulesDialog
           isOpen={isDialogOpen}
+          isBonusGame={isBonusGame}
           isReducedMotion={isReducedMotion}
           onClose={closeDialog}
         />

@@ -7,9 +7,12 @@ import GameResultsText from './game-results-text';
 import Button from '../button';
 import {
   GAME_RESULTS,
-  DESKTOP_BREAKPOINT,
-  DESKTOP_CHOICE_SIZE,
-  DESKTOP_CHOICE_SCALE,
+  LG_BREAKPOINT,
+  LG_CHOICE_SIZE,
+  LG_CHOICE_SCALE,
+  BONUS_LG_CHOICE_SCALE,
+  BONUS_SM_CHOICE_SCALE,
+  SM_CHOICE_SIZE,
 } from '../../constants';
 
 const StyledSelectedChoices = styled.div`
@@ -43,7 +46,7 @@ const StyledSelectedChoices = styled.div`
     }
   }
 
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
     min-width: 664px;
 
     h3 {
@@ -73,7 +76,7 @@ const StyledSelectedChoices = styled.div`
 `;
 
 const StyledChoiceChip = styled(ChoiceChip)`
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
     order: 2;
   }
 `;
@@ -87,6 +90,7 @@ const SelectedChoices = React.forwardRef(
       onAnimateComplete,
       results,
       onPlayAgain,
+      isBonusGame,
       isReducedMotion,
     },
     ref
@@ -94,8 +98,11 @@ const SelectedChoices = React.forwardRef(
     const houseChoiceRef = useRef(null);
     const resultsRef = useRef(null);
     const playerChoiceRef = useRef(null);
-    const isSmScreen =
-      document.documentElement.clientWidth < DESKTOP_BREAKPOINT;
+    const isSmScreen = document.documentElement.clientWidth < LG_BREAKPOINT;
+
+    const calcOffset = (squareDimension, scale) => {
+      return squareDimension * ((1 - scale) / 2);
+    };
 
     useLayoutEffect(() => {
       if (!houseChoice) {
@@ -109,22 +116,22 @@ const SelectedChoices = React.forwardRef(
           }
         );
 
+        const endPos = playerChoiceRef.current.getBoundingClientRect();
+        let scale = isSmScreen ? 1 : LG_CHOICE_SCALE;
+        if (isBonusGame) {
+          scale = isSmScreen ? BONUS_SM_CHOICE_SCALE : BONUS_LG_CHOICE_SCALE;
+        }
+        const offset = calcOffset(
+          isSmScreen ? SM_CHOICE_SIZE : LG_CHOICE_SIZE,
+          scale
+        );
+
         gsap.fromTo(
           playerChoiceRef.current,
           {
-            x: isSmScreen
-              ? startingCoords.x
-              : startingCoords.x +
-                calcXOffset(DESKTOP_CHOICE_SIZE, DESKTOP_CHOICE_SCALE),
-            y: isSmScreen
-              ? startingCoords.y
-              : startingCoords.y -
-                calcYOffset(
-                  DESKTOP_CHOICE_SIZE,
-                  DESKTOP_CHOICE_SIZE,
-                  DESKTOP_CHOICE_SCALE
-                ),
-            scale: isSmScreen && !houseChoice ? 1 : DESKTOP_CHOICE_SCALE,
+            x: startingCoords.x - endPos.x - offset,
+            y: startingCoords.y - endPos.y - offset,
+            scale: scale,
           },
           {
             x: 0,
@@ -165,17 +172,6 @@ const SelectedChoices = React.forwardRef(
         { opacity: 1, ease: 'power1.out', duration: !isReducedMotion ? 0.4 : 0 }
       );
     }, [results]);
-
-    const calcXOffset = (width, scale) => {
-      return Math.floor(((width * scale) / 2) * (1 - scale)) - 1;
-    };
-
-    const calcYOffset = (width, height, scale) => {
-      const scaledHeight = height * scale;
-      const scaledWidth = width * scale;
-      const hypotenuseLength = Math.hypot(scaledWidth, scaledHeight);
-      return Math.ceil(hypotenuseLength / 2) + 1;
-    };
 
     return (
       <StyledSelectedChoices
@@ -220,7 +216,7 @@ const SelectedChoices = React.forwardRef(
           ) : (
             <div className='blank-choice'></div>
           )}
-          <h3 role='alert' aria-live='assertive'>
+          <h3 role='alert' aria-live='polite'>
             The house picked{' '}
             {houseChoice ? (
               <span className='sr-only'>{houseChoice.title}</span>

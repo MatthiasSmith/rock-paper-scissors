@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import ScoreCard from './score-card';
 
 import Logo from '../../../public/images/logo.svg';
-import { DESKTOP_BREAKPOINT } from '../../constants';
+import BonusLogo from '../../../public/images/logo-bonus.svg';
+import { LG_BREAKPOINT } from '../../constants';
 
 const StyledHeader = styled.header`
   border: 3px solid var(--header-outline);
@@ -17,7 +18,7 @@ const StyledHeader = styled.header`
     height: 3.1rem;
   }
 
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
     border-radius: 14px;
     width: 705px;
     margin-top: 2.9rem;
@@ -30,11 +31,22 @@ const StyledHeader = styled.header`
   }
 `;
 
-const Header = ({ score }) => {
+const Header = ({ score, isBonusGame }) => {
   return (
     <StyledHeader className='flex-row space-between align-center'>
-      <h1 className='sr-only'>Rock Paper Scissors</h1>
-      <img src={Logo} alt='Rock Paper Scissors logo.' />
+      <h1 className='sr-only'>
+        {isBonusGame
+          ? 'Rock Paper Scissors Lizard Spock'
+          : 'Rock Paper Scissors'}
+      </h1>
+      <img
+        src={isBonusGame ? BonusLogo : Logo}
+        alt={
+          isBonusGame
+            ? 'Rock Paper Scissors Lizard Spock logo.'
+            : 'Rock Paper Scissors logo.'
+        }
+      />
       <ScoreCard score={score} />
     </StyledHeader>
   );

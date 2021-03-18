@@ -1,22 +1,25 @@
 import React from 'react';
-import styled from 'styled-components';
-
-import { DESKTOP_BREAKPOINT } from '../constants';
+import styled, { css } from 'styled-components';
 
 const StyledBottomButtonRow = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
   margin-bottom: 2.5rem;
-  justify-content: flex-end;
   width: 100%;
-  align-items: center;
-
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
-    align-items: flex-end;
-  }
+  ${(props) =>
+    props.isBonusGame &&
+    css`
+      margin-top: 2rem;
+    `}
 `;
 
 const BottomButtonRow = (props) => {
   return (
-    <StyledBottomButtonRow className='flex-column flex-1 relative-z-index-1'>
+    <StyledBottomButtonRow
+      className='flex-1 relative-z-index-1'
+      isBonusGame={props.isBonusGame}
+    >
       {props.children}
     </StyledBottomButtonRow>
   );

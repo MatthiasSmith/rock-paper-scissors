@@ -32,6 +32,12 @@ const StyledButton = styled.button`
         color: hsl(349, 53%, 51%);
       }
     `}
+
+  ${(props) =>
+    props.lessPadding &&
+    css`
+      padding: 0.6rem 1.5rem;
+    `}
 `;
 
 const button = React.forwardRef((props, ref) => {

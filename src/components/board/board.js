@@ -6,7 +6,7 @@ import Button from '../button';
 import MakeYourChoice from './make-your-choice';
 import SelectedChoices from './selected-choices';
 import GameResultsText from './game-results-text';
-import { CHOICE_DATA, GAME_RESULTS, DESKTOP_BREAKPOINT } from '../../constants';
+import { CHOICE_DATA, GAME_RESULTS, LG_BREAKPOINT } from '../../constants';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ const StyledBoard = styled.div`
     }
   }
 
-  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+  @media screen and (min-width: ${LG_BREAKPOINT}px) {
     margin-bottom: 0;
 
     .play-area {
@@ -40,7 +40,7 @@ const StyledBoard = styled.div`
   }
 `;
 
-const Board = ({ onResultsGiven, isReducedMotion }) => {
+const Board = ({ onResultsGiven, isBonusGame, isReducedMotion }) => {
   const [step, setStep] = useState(1);
   const [playerChoice, setPlayerChoice] = useState(null);
   const [houseChoice, setHouseChoice] = useState(null);
@@ -75,14 +75,6 @@ const Board = ({ onResultsGiven, isReducedMotion }) => {
   };
 
   useLayoutEffect(() => {
-    if (step === 1) {
-      gsap.fromTo(
-        playAreaRef.current,
-        { scale: 0 },
-        { scale: 1, duration: !isReducedMotion ? 0.4 : 0, ease: 'back.out' }
-      );
-    }
-
     if (step === 3) {
       setTimeout(() => {
         const result = determineWinner();
@@ -102,7 +94,7 @@ const Board = ({ onResultsGiven, isReducedMotion }) => {
   }, [step]);
 
   const makeHouseChoice = () => {
-    const rand = Math.ceil(Math.random() * 100) % 3;
+    const rand = Math.ceil(Math.random() * 100) % (isBonusGame ? 5 : 3);
     const choice = Object.keys(CHOICE_DATA).find(
       (item) => CHOICE_DATA[item].id === rand + 1
     );
@@ -112,30 +104,75 @@ const Board = ({ onResultsGiven, isReducedMotion }) => {
   const determineWinner = () => {
     let result = '';
 
-    switch (playerChoice) {
-      case houseChoice:
-        result = GAME_RESULTS.DRAW;
-        break;
-      case CHOICE_DATA.ROCK:
-        result =
-          houseChoice === CHOICE_DATA.SCISSORS
-            ? GAME_RESULTS.WIN
-            : GAME_RESULTS.LOSE;
-        break;
-      case CHOICE_DATA.PAPER:
-        result =
-          houseChoice === CHOICE_DATA.ROCK
-            ? GAME_RESULTS.WIN
-            : GAME_RESULTS.LOSE;
-        break;
-      case CHOICE_DATA.SCISSORS:
-        result =
-          houseChoice === CHOICE_DATA.PAPER
-            ? GAME_RESULTS.WIN
-            : GAME_RESULTS.LOSE;
-        break;
-      default:
-        break;
+    if (isBonusGame) {
+      switch (playerChoice) {
+        case houseChoice:
+          result = GAME_RESULTS.DRAW;
+          break;
+        case CHOICE_DATA.ROCK:
+          result =
+            houseChoice === CHOICE_DATA.SCISSORS ||
+            houseChoice === CHOICE_DATA.LIZARD
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        case CHOICE_DATA.PAPER:
+          result =
+            houseChoice === CHOICE_DATA.ROCK ||
+            houseChoice === CHOICE_DATA.SPOCK
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        case CHOICE_DATA.SCISSORS:
+          result =
+            houseChoice === CHOICE_DATA.PAPER ||
+            houseChoice === CHOICE_DATA.LIZARD
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        case CHOICE_DATA.LIZARD:
+          result =
+            houseChoice === CHOICE_DATA.PAPER ||
+            houseChoice === CHOICE_DATA.SPOCK
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        case CHOICE_DATA.SPOCK:
+          result =
+            houseChoice === CHOICE_DATA.SCISSORS ||
+            houseChoice === CHOICE_DATA.ROCK
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        default:
+          break;
+      }
+    } else {
+      switch (playerChoice) {
+        case houseChoice:
+          result = GAME_RESULTS.DRAW;
+          break;
+        case CHOICE_DATA.ROCK:
+          result =
+            houseChoice === CHOICE_DATA.SCISSORS
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        case CHOICE_DATA.PAPER:
+          result =
+            houseChoice === CHOICE_DATA.ROCK
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        case CHOICE_DATA.SCISSORS:
+          result =
+            houseChoice === CHOICE_DATA.PAPER
+              ? GAME_RESULTS.WIN
+              : GAME_RESULTS.LOSE;
+          break;
+        default:
+          break;
+      }
     }
 
     return result;
@@ -143,10 +180,11 @@ const Board = ({ onResultsGiven, isReducedMotion }) => {
 
   return (
     <StyledBoard className='board' step={step}>
-      <div ref={playAreaRef} className='play-area flex-column'>
+      <div className='play-area flex-column'>
         {step === 1 ? (
           <MakeYourChoice
             onSelect={handleSelect}
+            isBonusGame={isBonusGame}
             isReducedMotion={isReducedMotion}
           />
         ) : step === 2 ? (
@@ -155,6 +193,7 @@ const Board = ({ onResultsGiven, isReducedMotion }) => {
             playerChoice={playerChoice}
             startingCoords={choiceCoords}
             onAnimateComplete={doStep2}
+            isBonusGame={isBonusGame}
             isReducedMotion={isReducedMotion}
           />
         ) : step === 3 ? (
@@ -162,6 +201,7 @@ const Board = ({ onResultsGiven, isReducedMotion }) => {
             ref={playerChoiceRef}
             playerChoice={playerChoice}
             houseChoice={houseChoice}
+            isBonusGame={isBonusGame}
             isReducedMotion={isReducedMotion}
           />
         ) : (
@@ -171,6 +211,7 @@ const Board = ({ onResultsGiven, isReducedMotion }) => {
               houseChoice={houseChoice}
               results={results}
               onPlayAgain={resetGame}
+              isBonusGame={isBonusGame}
               isReducedMotion={isReducedMotion}
             />
             <div
