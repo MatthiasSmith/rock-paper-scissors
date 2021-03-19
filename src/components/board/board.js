@@ -1,6 +1,7 @@
 import React, {
   Fragment,
   useRef,
+  useEffect,
   useLayoutEffect,
   useState,
   useContext,
@@ -52,10 +53,48 @@ const Board = ({ onResultsGiven }) => {
   const [playerChoice, setPlayerChoice] = useState(null);
   const [houseChoice, setHouseChoice] = useState(null);
   const [results, setResults] = useState('');
-  const [choiceCoords, setChoiceCoords] = useState({ x: 0, y: 0 });
+  const [choiceCoords, setChoiceCoords] = useState(null);
+  const [timeouts, setTimeouts] = useState([]);
+  const [tweens, setTweens] = useState([]);
   const { isBonusGame } = useContext(BonusGameContext);
-
   const resultsRef = useRef(null);
+
+  useEffect(() => {
+    timeouts.forEach((timeout) => timeout && clearTimeout(timeout));
+    tweens.forEach((tween) => tween && tween.restart().pause());
+    setTimeouts([]);
+    setTweens([]);
+    resetGame();
+  }, [isBonusGame]);
+
+  useLayoutEffect(() => {
+    if (tweens.length > 3) {
+      setTweens([]);
+    }
+
+    if (timeouts.length > 3) {
+      setTimeouts([]);
+    }
+
+    if (step === 3) {
+      setTimeouts([
+        ...timeouts,
+        setTimeout(() => {
+          const result = determineWinner();
+          setResults(result);
+          onResultsGiven(result);
+          setStep(step + 1);
+        }, 1500),
+      ]);
+    }
+
+    if (step === 4) {
+      setTweens([
+        ...tweens,
+        gsap.fromTo(resultsRef.current, { opacity: 0 }, { opacity: 1 }),
+      ]);
+    }
+  }, [step]);
 
   const resetGame = () => {
     setStep(1);
@@ -63,37 +102,28 @@ const Board = ({ onResultsGiven }) => {
   };
 
   const handleSelect = (choice, coords) => {
-    setChoiceCoords({ ...coords });
-    gsap.to('.fade-out', {
-      opacity: 0,
-      onComplete: () => {
-        setPlayerChoice(choice);
-        setStep(step + 1);
-      },
-    });
+    setTweens([
+      ...tweens,
+      gsap.to('.fade-out', {
+        opacity: 0,
+        onComplete: () => {
+          setChoiceCoords({ ...coords });
+          setPlayerChoice(choice);
+          setStep(step + 1);
+        },
+      }),
+    ]);
   };
 
   const doStep2 = () => {
-    setTimeout(() => {
-      makeHouseChoice();
-      setStep(step + 1);
-    }, 1250);
-  };
-
-  useLayoutEffect(() => {
-    if (step === 3) {
+    setTimeouts([
+      ...timeouts,
       setTimeout(() => {
-        const result = determineWinner();
-        setResults(result);
-        onResultsGiven(result);
+        makeHouseChoice();
         setStep(step + 1);
-      }, 1500);
-    }
-
-    if (step === 4) {
-      gsap.fromTo(resultsRef.current, { opacity: 0 }, { opacity: 1 });
-    }
-  }, [step]);
+      }, 1250),
+    ]);
+  };
 
   const makeHouseChoice = () => {
     const rand = Math.ceil(Math.random() * 100) % (isBonusGame ? 5 : 3);
