@@ -56,7 +56,7 @@ Users should be able to:
 ### What I learned
 
 Building for accessibility takes thought and planning.
-Especially in a game that includes animations and dynamic states.
+Especially for a game that includes animations and dynamic states.
 
 I've been actively trying to become more aware of accessibility in my implementations. This challenge provided me with ample chance to familiarize myself with [Web Content Accessibility Guidelines (WCAG) 2.1](https://www.w3.org/TR/WCAG21/) and best practices. And I am on a never-ending journey to keep improving.
 
